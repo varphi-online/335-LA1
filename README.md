@@ -1,2 +1,2 @@
 # 335-LA1
-Long Assignment 1 for CSC335 via the UofA
+Long Assignment 1 for CSC335 (University of Arizona)
