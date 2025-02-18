@@ -1,8 +1,8 @@
 public class Album {
-    private final String albumTitle;
-    private final String artist;
-    private final String genre;
-    private final int year;
+    protected final String albumTitle;
+    protected final String artist;
+    protected final String genre;
+    protected final int year;
 
     public Album(String albumTitle, String artist, String genre, int year) {
         this.albumTitle = albumTitle;
@@ -25,5 +25,14 @@ public class Album {
 
     public int getYear() {
         return year;
+    }
+
+    public String toStringDebug() {
+        return "Album{" +
+                "albumTitle='" + albumTitle + '\'' +
+                ", artist='" + artist + '\'' +
+                ", genre='" + genre + '\'' +
+                ", year=" + year +
+                '}';
     }
 }
