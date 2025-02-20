@@ -14,12 +14,13 @@ public class LibraryModel extends MusicStore {
         playlists.add(new Playlist(name));
     }
 
-    public Playlist findPlaylist(String name) {
-        for (Playlist playlist : playlists) {
-            if (playlist.getName().equalsIgnoreCase(name)) {
-                return playlist;
-            }
-        }
-        return null;
+    public void addPlaylist(Playlist playlist) {
+        playlists.add(playlist);
+    }
+
+    public ArrayList<Playlist> findPlaylist(String name) {
+        ArrayList<Playlist> found = new ArrayList<>();
+        playlists.stream().filter(playlist -> playlist.getName().toLowerCase().contains(name)).forEach(found::add);
+        return found;
     }
 }
