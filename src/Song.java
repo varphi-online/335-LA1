@@ -48,6 +48,6 @@ public class Song extends Album {
     }
 
     public String toString() {
-        return title+" | "+artist+" | "+id+" | "+albumTitle+" | "+genre+" | "+year+" | "+(rating.isPresent() ? rating.get() : "No rating");
+        return title+" | "+artist+" | "+id+" | "+albumTitle+" | "+genre+" | "+year+" | "+(rating.isPresent() ? rating.get() : "No rating")+" | favorite: "+favorite;
     }
 }

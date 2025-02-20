@@ -59,6 +59,7 @@ public class Controller {
         }
     }
 
+    @SuppressWarnings("UseSpecificCatch")
     public <T extends MusicStore> void command(String input, T store) {
         if (input.length() >= 2) {
             String[] inputArray = input.split(" ", 2);
@@ -84,41 +85,46 @@ public class Controller {
                     }
                 }
                 case '+' -> {
-                    if (store instanceof MusicStore) {
+                    if (!(store instanceof LibraryModel)) {
                         switch (command.charAt(1)) {
-                            case 'a' -> store.findAlbumTitle(query).forEach(a -> libraryModel.addAlbum(a));
+                            case 'a' -> {
+                                store.findAlbumTitle(query).forEach(a -> {
+                                    libraryModel.addAlbum(a);
+                                    musicStore.findSongAlbum(a.getAlbumTitle()).forEach(s -> libraryModel.addSong(s));
+                                });
+                            }
                             case 's' -> store.findSongTitle(query).forEach(s -> libraryModel.addSong(s));
                         }
                     } else {
-                        switch (command.charAt(1)) {
-                            case 'p' -> {
-                                String[] playlistQuery = query.split(":");
-                                for (String s : playlistQuery) {
-                                    s = s.trim();
-                                }
-                                boolean exists = !libraryModel.findPlaylist(playlistQuery[0]).isEmpty();
-                                if (playlistQuery.length > 1) {
-                                    if (exists) {
-                                        try {
-                                            Song song = libraryModel.findSongTitle(playlistQuery[1]).get(0);
-                                            libraryModel.findPlaylist(playlistQuery[0]).get(0).addSong(song);
-                                        } catch (IndexOutOfBoundsException e) {
-                                            System.out.println("Song not found");
-                                        }
-                                    } else {
-                                        Playlist playlist = new Playlist(playlistQuery[0]);
-                                        try {
-                                            Song song = libraryModel.findSongTitle(playlistQuery[1]).get(0);
-                                            playlist.addSong(song);
-                                            libraryModel.addPlaylist(playlist);
-                                        } catch (IndexOutOfBoundsException e) {
-                                            System.out.println("Song not found");
-                                        }
+                        if (command.charAt(1) == 'p') {
+                            String[] playlistQuery = query.split(":");
+                            for (int i = 0; i < playlistQuery.length; i++) {
+                                String s = playlistQuery[i];
+                                playlistQuery[i] = s.trim();
+                            }
+                            boolean exists = !libraryModel.findPlaylist(playlistQuery[0]).isEmpty();
+                            if (playlistQuery.length > 1 && query.contains(":")) {
+                                if (exists) {
+                                    try {
+                                        Song song = libraryModel.findSongTitle(playlistQuery[1]).get(0);
+                                        libraryModel.findPlaylist(playlistQuery[0]).get(0).addSong(song);
+                                    } catch (IndexOutOfBoundsException e) {
+                                        System.out.println("Song not found");
                                     }
                                 } else {
-                                    view.invalid();
+                                    Playlist playlist = new Playlist(playlistQuery[0]);
+                                    try {
+                                        Song song = libraryModel.findSongTitle(playlistQuery[1]).get(0);
+                                        playlist.addSong(song);
+                                        libraryModel.addPlaylist(playlist);
+                                    } catch (IndexOutOfBoundsException e) {
+                                        System.out.println("Song not found");
+                                    }
                                 }
+                            } else {
+                                libraryModel.addPlaylist(new Playlist(playlistQuery[0]));
                             }
+
                         }
                     }
                 }
@@ -126,8 +132,9 @@ public class Controller {
                     if (command.charAt(1) == 'p') {
                         if (store instanceof LibraryModel) {
                             String[] playlistQuery = query.split(":");
-                            for (String s : playlistQuery) {
-                                s = s.trim();
+                            for (int i = 0; i < playlistQuery.length; i++) {
+                                String s = playlistQuery[i];
+                                playlistQuery[i] = s.trim();
                             }
                             Playlist playlist = libraryModel.findPlaylist(playlistQuery[0]).get(0);
                             if (playlistQuery.length > 1) {
@@ -144,11 +151,19 @@ public class Controller {
                 case '*' -> {
                     if (command.charAt(1) == 's') {
                         if (store instanceof LibraryModel) {
-                            String[] songQuery = query.split(" (?=[^ ]*$)", 2);
+                            String[] songQuery = query.split("\\s+");
+                            int rating = Integer.parseInt(songQuery[songQuery.length - 1]);
+                            String songTitle = "";
+                            for (int i = 0; i < songQuery.length - 1; i++) {
+                                songTitle = songQuery[i];
+                            }
                             try {
-                                Song song = libraryModel.findSongTitle(songQuery[0]).get(0);
+                                Song song = libraryModel.findSongTitle(songTitle).get(0);
                                 if (songQuery.length > 1) {
-                                    song.setRating(Integer.parseInt(songQuery[1]));
+                                    song.setRating(rating);
+                                    if (rating == 5) {
+                                        song.setFavorite(true);
+                                    }
                                 } else {
                                     view.invalid();
                                 }
@@ -165,7 +180,7 @@ public class Controller {
                         if (store instanceof LibraryModel) {
                             try {
                                 Song song = libraryModel.findSongTitle(query).get(0);
-                                song.setFavorite(true);
+                                song.setFavorite(!song.getFavorite());
                             } catch (Exception e) {
                                 view.error(e);
                             }

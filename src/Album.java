@@ -27,7 +27,7 @@ public class Album {
         return year;
     }
 
-    public String toStringDebug() {
+    public String toString() {
         return "Album{" +
                 "albumTitle='" + albumTitle + '\'' +
                 ", artist='" + artist + '\'' +

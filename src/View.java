@@ -66,7 +66,7 @@ public class View {
                         + : Add           (Exact)
                         - : Remove        (Exact)
                         * : Rate          (Exact)
-                        # : Favorite      (Exact)
+                        # : Favorite      (Exact, Toggle)
                         h : Help
                         q : Quit
                         m : Switch Mode
