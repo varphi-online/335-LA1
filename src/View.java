@@ -35,6 +35,14 @@ public class View {
         }
     }
 
+    public void invalid(){
+        System.out.println("Invalid Command.");
+    }
+
+    public void error(Exception e){
+        System.out.println("Error with Command: " + e.getMessage());
+    }
+
     public void clscr() {
         System.out.print("\033[H\033[2J");
         System.out.flush();

@@ -7,9 +7,10 @@ public class Song extends Album {
     private final String title;
     private Optional<Integer> rating = Optional.empty();
     private final int id;
+    private Boolean favorite = false;
 
     public Song(String t, Album album) {
-        super(album.getArtist(), album.getAlbumTitle(), album.getGenre(), album.getYear());
+        super(album.getAlbumTitle() ,album.getArtist(), album.getGenre(), album.getYear());
         title = t;
         id = Objects.hash(title, getArtist(), getAlbumTitle(), getGenre(), getYear());
 
@@ -36,6 +37,14 @@ public class Song extends Album {
 
     public int getId() {
         return id;
+    }
+
+    public Boolean getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Boolean value) {
+        this.favorite = value;
     }
 
     public String toString() {

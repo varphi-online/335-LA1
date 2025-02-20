@@ -18,6 +18,14 @@ public class LibraryModel extends MusicStore {
         playlists.add(playlist);
     }
 
+    public void addAlbum(Album album) {
+        albums.add(album);
+    }
+
+    public void addSong(Song song) {
+        songs.add(song);
+    }
+
     public ArrayList<Playlist> findPlaylist(String name) {
         ArrayList<Playlist> found = new ArrayList<>();
         playlists.stream().filter(playlist -> playlist.getName().toLowerCase().contains(name)).forEach(found::add);

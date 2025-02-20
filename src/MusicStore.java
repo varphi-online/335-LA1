@@ -29,7 +29,7 @@ public class MusicStore {
 
     public ArrayList<Song> findSongArtist(String name) {
         ArrayList<Song> foundSongs = new ArrayList<>();
-        songs.stream().filter(song -> song.getArtist().toLowerCase().contains(name.toLowerCase())).forEach(song -> foundSongs.add(song));
+        songs.stream().filter(song -> song.getArtist().toLowerCase().contains(name.toLowerCase())).forEach(song -> System.out.println(song));
         return foundSongs;
     }
     public String toString() {
