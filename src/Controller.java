@@ -103,7 +103,7 @@ public class Controller {
                                 playlistQuery[i] = s.trim();
                             }
                             boolean exists = !libraryModel.findPlaylist(playlistQuery[0]).isEmpty();
-                            if (playlistQuery.length > 1 && query.contains(":")) {
+                            if (playlistQuery.length > 1) {
                                 if (exists) {
                                     try {
                                         Song song = libraryModel.findSongTitle(playlistQuery[1]).get(0);

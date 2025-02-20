@@ -2,7 +2,6 @@
 import java.util.Objects;
 import java.util.Optional;
 
-
 public class Song extends Album {
     private final String title;
     private Optional<Integer> rating = Optional.empty();
@@ -10,7 +9,7 @@ public class Song extends Album {
     private Boolean favorite = false;
 
     public Song(String t, Album album) {
-        super(album.getAlbumTitle() ,album.getArtist(), album.getGenre(), album.getYear());
+        super(album.getAlbumTitle(), album.getArtist(), album.getGenre(), album.getYear());
         title = t;
         id = Objects.hash(title, getArtist(), getAlbumTitle(), getGenre(), getYear());
 
@@ -28,7 +27,11 @@ public class Song extends Album {
     }
 
     public void setRating(int newRating) {
-        rating = Optional.of(newRating);
+        if (newRating < 0 || newRating > 5) {
+            rating = Optional.empty();
+        } else {
+            rating = Optional.of(newRating);
+        }
     }
 
     public String getTitle() {
@@ -48,6 +51,15 @@ public class Song extends Album {
     }
 
     public String toString() {
-        return title+" | "+artist+" | "+id+" | "+albumTitle+" | "+genre+" | "+year+" | "+(rating.isPresent() ? rating.get() : "No rating")+" | favorite: "+favorite;
+        String out = "+" + "-".repeat(26) + "+" + "-".repeat(13) + "+" + "-".repeat(7) + "+" + "-".repeat(6) + "+\n";
+        out += "| " + title +" ".repeat(54-title.length())+ "|\n| " + format(artist, 25) + " | " + format(albumTitle, 12) + " | "
+                + format(genre, 6) + " | " + format(String.valueOf(year), 6) + (favorite ? "| ★" : "|");
+        return out;
+    }
+
+    public String format(String str, int n) {
+        String s = str.substring(0, Math.min(n - 1, str.length()));
+        int padding = Math.max(0, n - s.length() - 1);
+        return s + " ".repeat(padding);
     }
 }

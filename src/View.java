@@ -60,7 +60,7 @@ public class View {
 
     public static void printMenu() {
         System.out.print(
-                "Mode: " + (mode ? "Store" : "Library") + "\n\n" + """
+                "Mode: " + (mode ? "MusicStore" : "Library") + "\n\n" + """
                         Prefixes:
                         ? : Search
                         + : Add           (Exact)
@@ -69,13 +69,13 @@ public class View {
                         # : Favorite      (Exact, Toggle)
                         h : Help
                         q : Quit
-                        m : Switch Mode
+                        m : Switch Mode   (MusicStore/Library)
 
                         Commands:
-                        a <title>  - Album by title
-                        s <title>  - Song by title/id
-                        A <artist> - Album by artist
-                        S <artist> - Song by artist
+                        a <title>    -    Album by title
+                        s <title>    -    Song by title/id
+                        A <artist>   -    Album by artist
+                        S <artist>   -    Song by artist
                         p <name> : <?song name/id> - Playlist by name : (optionally) with song
 
                         Note: Songs may be referenced by name or @id when adding to a playlist/library.
