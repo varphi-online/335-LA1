@@ -1,3 +1,6 @@
+package main.model;
+import main.view.View;
+
 public class Album {
     protected final String albumTitle;
     protected final String artist;
@@ -28,12 +31,10 @@ public class Album {
     }
 
     public String toString() {
-        return "+"+"-".repeat(70)+"\n"+"| " + albumTitle + " | " +format(artist, 25) + " | " + format(genre, 15) + " | " + year+"\n"+"+"+"-".repeat(70);
-    }
-
-    public String format(String str, int n) {
-        String s = str.substring(0, Math.min(n - 1, str.length()));
-        int padding = Math.max(0, n - s.length() - 1);
-        return s + " ".repeat(padding);
+        String out = "";
+        //out += "├" + "─".repeat(31) +"┼" + "─".repeat(21) + "┼" + "─".repeat(26) + "┼" + "─".repeat(6) + "┤\n";
+        out += "│ " + View.format(albumTitle, 30) + " │ " + View.format(artist, 20) + " │ " + 
+               View.format(genre, 25) + " │ " + year + " │";
+        return out;
     }
 }

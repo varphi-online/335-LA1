@@ -1,3 +1,4 @@
+package main.model;
 import java.util.ArrayList;
 
 public class MusicStore {
@@ -7,6 +8,14 @@ public class MusicStore {
     public MusicStore() {
         this.albums = new ArrayList<>();
         this.songs = new ArrayList<>();
+    }
+    
+    public void addAlbum(Album album) {
+    	albums.add(album);
+    }
+    
+    public void addSong(Song song) {
+    	songs.add(song);
     }
 
     public ArrayList<Album> findAlbumTitle(String title) {
@@ -37,12 +46,5 @@ public class MusicStore {
         ArrayList<Song> foundSongs = new ArrayList<>();
         songs.stream().filter(song -> song.getAlbumTitle().toLowerCase().contains(title.toLowerCase())).forEach(song -> foundSongs.add(song));
         return foundSongs;
-    }
-    
-    public String toString() {
-        return "MusicStore{" +
-                "albums=" + albums.toString() +
-                ", songs=" + songs.toString() +
-                '}';
     }
 }

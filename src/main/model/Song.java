@@ -1,6 +1,7 @@
-
+package main.model;
 import java.util.Objects;
 import java.util.Optional;
+import main.view.View;
 
 public class Song extends Album {
     private final String title;
@@ -16,7 +17,7 @@ public class Song extends Album {
     }
 
     public Song(Song song) {
-        super(song.getArtist(), song.getAlbumTitle(), song.getGenre(), song.getYear());
+        super(song.getAlbumTitle(),song.getArtist(), song.getGenre(), song.getYear());
         title = song.getTitle();
         rating = song.getRating();
         id = song.getId();
@@ -31,6 +32,9 @@ public class Song extends Album {
             rating = Optional.empty();
         } else {
             rating = Optional.of(newRating);
+            if (newRating==5) {
+            	setFavorite(true);
+            }
         }
     }
 
@@ -51,15 +55,10 @@ public class Song extends Album {
     }
 
     public String toString() {
-        String out = "+" + "-".repeat(26) + "+" + "-".repeat(13) + "+" + "-".repeat(7) + "+" + "-".repeat(6) + "+\n";
-        out += "| " + title +" ".repeat(54-title.length())+ "|\n| " + format(artist, 25) + " | " + format(albumTitle, 12) + " | "
-                + format(genre, 6) + " | " + format(String.valueOf(year), 6) + (favorite ? "| ★" : "|");
+        String out = "";
+        //out += "├" + "─".repeat(42) +"┼" + "─".repeat(26) + "┼" + "─".repeat(31) + "┼" + "─".repeat(7) + "┼" + "─".repeat(6) + "┼" + "─".repeat(8) + "┤\n";
+        out += "│ " + title +" ".repeat(40-title.length())+ " │ " + View.format(artist, 25) + " │ " + View.format(albumTitle, 30) + " │ "
+                + View.format(genre, 6) + " │ " + View.format(String.valueOf(year), 6)+"│ "+ (rating.isEmpty() ? " ":rating.get()) + (favorite ? "      │ *" : "      │");
         return out;
-    }
-
-    public String format(String str, int n) {
-        String s = str.substring(0, Math.min(n - 1, str.length()));
-        int padding = Math.max(0, n - s.length() - 1);
-        return s + " ".repeat(padding);
     }
 }
