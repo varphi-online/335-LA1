@@ -1,4 +1,5 @@
 package main.view;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import main.controller.Controller;
@@ -13,6 +14,15 @@ public class View {
         Scanner main = new Scanner(System.in);
         clearScreen();
         printMenu();
+        System.out.print("""
+                Example:
+                $ #                    - Search favorite songs
+                $ *s Take It All -1    - Remove any rating of the song with title "Take It All"
+                $ +p Chill Mix : Money - Add song w/ title "Money" to the "Chill Mix" playlist, or create it if it doesn't exist
+
+                Mode: MusicStore
+                >──────────────────────────────────────────────────────────────────────────────────────────────────────────────<""");
+        System.out.print("\n\n> ");
         while (main.hasNextLine()) {
             String input = main.nextLine();
             if (input.isBlank()) {
@@ -26,18 +36,17 @@ public class View {
                 }
                 case 'm' -> {
                     mode = !mode;
-                    clearScreen();
-                    printMenu();
+                    System.out.println("Mode switched to " + (mode ? "MusicStore" : "Library"));
                 }
                 default -> {
-                    if (input.equals("clear")) {
-                        clearScreen();
-                        System.out.println("Enter Command:");
-                    } else {
-                        controller.handleInput(input, mode);
+                    switch (input) {
+                        case "clear" -> clearScreen();
+                        case "help" -> printMenu();
+                        default -> controller.handleInput(input, mode);
                     }
                 }
             }
+            System.out.print("> ");
         }
         main.close();
     }
@@ -63,11 +72,12 @@ public class View {
         System.out.println("");
         if (t.get(0) instanceof Song) {
             System.out.println("Songs:");
-            
+
             System.out.println("│ " + format("Song Title", 41) + " │ " + format("Artist", 25) + " │ "
                     + format("Album Title", 30) + " │ "
                     + format("Genre", 6) + " │ " + format("Year", 6) + "│ Rating " + "│ Fav");
-            System.out.println("├" + "─".repeat(42) +"┼" + "─".repeat(26) + "┼" + "─".repeat(31) + "┼" + "─".repeat(7) + "┼" + "─".repeat(6) + "┼" + "─".repeat(8) + "┤");
+            System.out.println("├" + "─".repeat(42) + "┼" + "─".repeat(26) + "┼" + "─".repeat(31) + "┼" + "─".repeat(7)
+                    + "┼" + "─".repeat(6) + "┼" + "─".repeat(8) + "┤");
             for (T item : t) {
                 System.out.println(item);
             }
@@ -77,11 +87,12 @@ public class View {
             System.out.println("Albums:");
             System.out.println("│ " + format("Album Title", 30) + " │ " + format("Artist", 20) + " │ "
                     + format("Genre", 25) + " │ Year │");
-            System.out.println("├" + "─".repeat(31) +"┼" + "─".repeat(21) + "┼" + "─".repeat(26) + "┼" + "─".repeat(6) + "┤");
+            // System.out.println("├" + "─".repeat(31) +"┼" + "─".repeat(21) + "┼" +
+            // "─".repeat(26) + "┼" + "─".repeat(6) + "┤");
             for (T item : t) {
                 System.out.println(item);
             }
-            System.out.println("└" + "─".repeat(31) + "┴" + "─".repeat(21) + "┴" + "─".repeat(26) + "┴" + "──────┘");
+            System.out.println("└" + "─".repeat(87) + "┘");
         } else if (t.get(0) instanceof Playlist) {
             System.out.println("Playlists:\n");
             for (T item : t) {
@@ -92,35 +103,20 @@ public class View {
     }
 
     public static void printMenu() {
-        System.out.print(
-                "Mode: " + (mode ? "MusicStore" : "Library") + "\n\n" + """
-                        Prefixes:
-                        ? : Search
-                        + : Add           (Exact)
-                        - : Remove        (Exact)
-                        * : Rate          (Exact)
-                        # : Favorite      (Exact, Toggle, Search)
-                        h : Help
-                        q : Quit
-                        m : Switch Mode   (MusicStore/Library)
-
-                        Commands:
-                        a <title>    -    Album by title
-                        s <title>    -    Song by title/id
-                        A <artist>   -    Album by artist
-                        S <artist>   -    Song by artist
-                        p <name> : <?song name/id> - Playlist by name : (optionally) with song
-
-                        Note: Songs may be referenced by name or @id when adding to a playlist/library.
-
-                        Example:
-                        $ # - Search favorite songs
-                        $ *s @83923 -1 - Remove any rating of the song with id "83923"
-
-                        >=============================================================================<
-
-                        Enter Command:
-                        """);
+        System.out.print("""
+            ┌─────────────────────────────────────────────────────┬───────────────────────────────────────────────────────┐
+            │                                                     │                                                       │
+            │      Prefixes:                                      │      Commands:                                        │
+            │      ? : Search                                     │      a <title>    -    Album by title                 │
+            │      + : Add           (Exact)                      │      s <title>    -    Song by title                  │
+            │      - : Remove        (Exact)                      │      A <artist>   -    Album by artist                │
+            │      * : Rate          (Exact)                      │      S <artist>   -    Song by artist                 │
+            │      # : Favorite      (Exact, Toggle, Search)      │      p <name> : <?song name>                          │
+            │      h : Help                                       │          └ Playlist by name : (optional) w/ song      │
+            │      q : Quit                                       │                                                       │
+            │      m : Switch Mode   (MusicStore/Library)         │                                                       │
+            │                                                     │                                                       │
+            └─────────────────────────────────────────────────────┴───────────────────────────────────────────────────────┘\n\n""");
     }
 
     public static String format(String str, int n) {

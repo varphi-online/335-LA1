@@ -12,8 +12,20 @@ class AlbumTest {
 	@Test
 	void printTest() {
 		assertEquals(foundationAlbum.toString(), """
-				+-------------------------------+---------------------+--------------------------+------+
-				| Dark Side of the Moon         | Pink Floyd          | Psychedelic Rock         | 1973 |""");
+				├───────────────────────────────┬─────────────────────┬──────────────────────────┬──────┤
+				│ Dark Side of the Moon         │ Pink Floyd          │ Psychedelic Rock         │ 1973 │
+				├───────────────────────────────┴─────────────────────┴──────────────────────────┴──────┤""");
 	}
+	
+	@Test
+	void songTest() {
+		foundationAlbum.addSong("Money");
+		assertEquals(foundationAlbum.toString(), """
+				├───────────────────────────────┬─────────────────────┬──────────────────────────┬──────┤
+				│ Dark Side of the Moon         │ Pink Floyd          │ Psychedelic Rock         │ 1973 │
+				├───────────────────────────────┴─────────────────────┴──────────────────────────┴──────┤
+				│     1. Money                                                                          │""");
+	}
+	
 
 }

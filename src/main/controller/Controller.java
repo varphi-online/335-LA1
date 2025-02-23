@@ -1,4 +1,5 @@
 package main.controller;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -49,6 +50,7 @@ public class Controller {
         while ((line = br.readLine()) != null) {
             String title = line;
             Song song = new Song(title, album);
+            album.addSong(title);
             musicStore.addSong(song);
         }
         br.close();
@@ -81,7 +83,11 @@ public class Controller {
                 default -> view.invalid();
             }
         } else {
-            view.invalid();
+            if (input.equals("#")) {
+                favorite("#", "", store);
+            } else{
+                view.invalid();
+            }
         }
     }
 
@@ -104,6 +110,7 @@ public class Controller {
             default -> view.invalid();
         }
     }
+
     private <T extends MusicStore> void add(String command, String query, T store) {
         if (!(store instanceof LibraryModel)) {
             switch (command.charAt(1)) {
@@ -198,7 +205,9 @@ public class Controller {
     }
 
     private <T extends MusicStore> void favorite(String command, String query, T store) {
-        if (command.charAt(1) == 's' && store instanceof LibraryModel) {
+        if (command.length() == 1) {
+            view.printResults(libraryModel.getFavorites());
+        } else if (command.charAt(1) == 's' && store instanceof LibraryModel) {
             if (query.isEmpty()) {
                 view.printResults(libraryModel.getFavorites());
             } else

@@ -58,7 +58,7 @@ public class Song extends Album {
         String out = "";
         //out += "├" + "─".repeat(42) +"┼" + "─".repeat(26) + "┼" + "─".repeat(31) + "┼" + "─".repeat(7) + "┼" + "─".repeat(6) + "┼" + "─".repeat(8) + "┤\n";
         out += "│ " + title +" ".repeat(40-title.length())+ " │ " + View.format(artist, 25) + " │ " + View.format(albumTitle, 30) + " │ "
-                + View.format(genre, 6) + " │ " + View.format(String.valueOf(year), 6)+"│ "+ (rating.isEmpty() ? " ":rating.get()) + (favorite ? "      │ *" : "      │");
+                + View.format(genre, 6) + " │ " + View.format(String.valueOf(year), 6)+"│ "+ (rating.isEmpty() ? " ":rating.get()) + (favorite ? "      │  *" : "      │");
         return out;
     }
 }
