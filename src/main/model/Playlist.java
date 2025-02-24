@@ -1,7 +1,7 @@
 package main.model;
 
 import java.util.ArrayList;
-import main.view.View;
+import java.util.stream.Collectors;
 
 public class Playlist {
     private final ArrayList<Song> songs;
@@ -30,22 +30,17 @@ public class Playlist {
 
     @Override
     public String toString() {
-        String out = "";
-        out += "═".repeat(57 - name.length() / 2) + "╣ Playlist: " + name + " ╠" + "═".repeat(56 - name.length() / 2)
-                + "\n\n";
-
-        out += "│ " + View.format("Song Title", 41) + " │ " + View.format("Artist", 25) + " │ "
-                + View.format("Album Title", 30) + " │ "
-                + View.format("Genre", 6) + " │ " + View.format("Year", 6) + "│ Rating " + "│ Fav\n" + "├"
-                + "─".repeat(42) + "┼" + "─".repeat(26) + "┼" + "─".repeat(31) + "┼" + "─".repeat(7) + "┼"
-                + "─".repeat(6) + "┼" + "─".repeat(8) + "┤\n";
-
-        for (Song song : songs) {
-            out += song.toString() + "\n";
-        }
-
-        out += "└" + "─".repeat(42) + "┴" + "─".repeat(26) + "┴" + "─".repeat(31) + "┴" + "─".repeat(7)
-                + "┴" + "─".repeat(6) + "┴" + "─".repeat(8) + "┘";
+        // I couldnt figure out a nice formatting method that would center
+        // this in one line, so I just used the .repeat(-center.len/2) bth sides
+        String out = "═".repeat(57 - name.length() / 2) + "╣ Playlist: " + name + " ╠" + "═".repeat(56 - name.length() / 2)+ "\n\n";
+        String toPrint = songs.stream().map(Object::toString).collect(Collectors.joining("\n"));
+        out += """
+        │ Song Title                               │ Artist                   │ Album Title                   │ Genre │ Year │ Rating │ Fav
+        ├──────────────────────────────────────────┼──────────────────────────┼───────────────────────────────┼───────┼──────┼────────┤
+        %s
+        └──────────────────────────────────────────┴──────────────────────────┴───────────────────────────────┴───────┴──────┴────────┘
+        """
+        .formatted(toPrint);
         return out;
     }
 

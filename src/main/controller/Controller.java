@@ -17,7 +17,6 @@ public class Controller {
     private static View view;
 
     public static void main(String[] args) throws IOException {
-        System.out.println("Welcome to the Music Store!");
         Controller controller = new Controller();
         libraryModel = new LibraryModel();
         view = new View();
@@ -85,7 +84,7 @@ public class Controller {
         } else {
             if (input.equals("#")) {
                 favorite("#", "", store);
-            } else{
+            } else {
                 view.invalid();
             }
         }
@@ -119,8 +118,21 @@ public class Controller {
                         libraryModel.addAlbum(a);
                         musicStore.findSongAlbum(a.getAlbumTitle()).forEach(s -> libraryModel.addSong(s));
                     });
+                    if (!store.findAlbumTitle(query).isEmpty()) {
+                        view.alert("Added album to Library.");
+                    } else {
+                        view.alert("Album not found");
+                    }
+                    ;
                 }
-                case 's' -> store.findSongTitle(query).forEach(s -> libraryModel.addSong(s));
+                case 's' -> {
+                    store.findSongTitle(query).forEach(s -> libraryModel.addSong(s));
+                    if (!store.findSongTitle(query).isEmpty()) {
+                        view.alert("Added song to Library.");
+                    } else {
+                        view.alert("Song not found");
+                    }
+                }
                 default -> view.invalid();
             }
         } else {
@@ -137,8 +149,9 @@ public class Controller {
                         try {
                             Song song = libraryModel.findSongTitle(playlistQuery[1]).get(0);
                             libraryModel.findPlaylist(playlistQuery[0]).get(0).addSong(song);
+                            view.alert("Added song: "+song+"to"+playlistQuery[0]+".");
                         } catch (IndexOutOfBoundsException e) {
-                            System.out.println("Song not found");
+                            view.error(e);
                         }
                     } else {
                         Playlist playlist = new Playlist(playlistQuery[0]);
@@ -146,12 +159,14 @@ public class Controller {
                             Song song = libraryModel.findSongTitle(playlistQuery[1]).get(0);
                             playlist.addSong(song);
                             libraryModel.addPlaylist(playlist);
+                            view.alert("Created playlist: "+playlist.getName()+", and added " + song.getTitle()+" to it.");
                         } catch (IndexOutOfBoundsException e) {
-                            System.out.println("Song not found");
+                            view.error(e);
                         }
                     }
                 } else {
                     libraryModel.addPlaylist(new Playlist(playlistQuery[0]));
+                    view.alert("Added playlist: "+playlistQuery[0]+"to Library.");
                 }
             } else {
                 view.invalid();
@@ -190,9 +205,12 @@ public class Controller {
                 Song song = libraryModel.findSongTitle(songTitle).get(0);
                 if (songQuery.length > 1) {
                     song.setRating(rating);
+                    view.alert("Set song: \""+song.getTitle()+"\" rating to: "+rating+".");
                     if (rating == 5) {
                         song.setFavorite(true);
+                        view.alert("Added to favorites");
                     }
+                    
                 } else {
                     view.invalid();
                 }
@@ -214,6 +232,11 @@ public class Controller {
                 try {
                     Song song = libraryModel.findSongTitle(query).get(0);
                     song.setFavorite(!song.getFavorite());
+                    if (song.getFavorite()){
+                        view.alert("Added to Favorites.");
+                    } else {
+                        view.alert("Removed from Favorites.");
+                    }
                 } catch (Exception e) {
                     view.error(e);
                 }

@@ -1,6 +1,6 @@
 package main.model;
+
 import java.util.Optional;
-import main.view.View;
 
 public class Song extends Album {
     private final String title;
@@ -13,7 +13,7 @@ public class Song extends Album {
     }
 
     public Song(Song song) {
-        super(song.getAlbumTitle(),song.getArtist(), song.getGenre(), song.getYear());
+        super(song.getAlbumTitle(), song.getArtist(), song.getGenre(), song.getYear());
         title = song.getTitle();
         rating = song.getRating();
     }
@@ -21,14 +21,15 @@ public class Song extends Album {
     public Optional<Integer> getRating() {
         return rating;
     }
-
+    
     public void setRating(int newRating) {
+        // Any invalid ratings remove the rating
         if (newRating < 0 || newRating > 5) {
             rating = Optional.empty();
         } else {
             rating = Optional.of(newRating);
-            if (newRating==5) {
-            	setFavorite(true);
+            if (newRating == 5) {
+                setFavorite(true);
             }
         }
     }
@@ -46,10 +47,9 @@ public class Song extends Album {
     }
 
     public String toString() {
-        String out = "";
-        //out += "├" + "─".repeat(42) +"┼" + "─".repeat(26) + "┼" + "─".repeat(31) + "┼" + "─".repeat(7) + "┼" + "─".repeat(6) + "┼" + "─".repeat(8) + "┤\n";
-        out += "│ " + title +" ".repeat(40-title.length())+ " │ " + View.format(artist, 25) + " │ " + View.format(albumTitle, 30) + " │ "
-                + View.format(genre, 6) + " │ " + View.format(String.valueOf(year), 6)+"│ "+ (rating.isEmpty() ? " ":rating.get()) + (favorite ? "      │  *" : "      │");
-        return out;
+        return String.format(
+                "│ %-40s │ %-24s │ %-29s │ %-5.5s │ %-4d │   %-4s │ %s",
+                title, artist, albumTitle, genre, year, (rating.isEmpty() ? " " : "" + rating.get()),
+                (favorite ? " *" : ""));
     }
 }

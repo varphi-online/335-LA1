@@ -1,6 +1,6 @@
 package main.model;
+
 import java.util.ArrayList;
-import main.view.View;
 
 public class Album {
     protected final String albumTitle;
@@ -14,6 +14,13 @@ public class Album {
         this.artist = artist;
         this.genre = genre;
         this.year = year;
+    }
+
+    public Album(Album album){
+        this.albumTitle = album.albumTitle;
+        this.artist = album.artist;
+        this.genre = album.genre;
+        this.year = album.year;
     }
 
     public String getAlbumTitle() {
@@ -32,20 +39,21 @@ public class Album {
         return year;
     }
 
-    public void addSong(String song){
+    public void addSong(String song) {
         songs.add(song);
     }
 
     @Override
     public String toString() {
-        String out = "";
-        out += "├" + "─".repeat(31) +"┬" + "─".repeat(21) + "┬" + "─".repeat(26) + "┬" + "─".repeat(6) + "┤\n";
-        out += "│ " + View.format(albumTitle, 30) + " │ " + View.format(artist, 20) + " │ " + 
-               View.format(genre, 25) + " │ " + year + " │";
-        out += "\n├" + "─".repeat(31) +"┴" + "─".repeat(21) + "┴" + "─".repeat(26) + "┴" + "─".repeat(6) + "┤";
-        for (int i=1; i<=songs.size(); i++) {
-            out += "\n│     " +i+". "+(Integer.toString(i).length()<2?" ":"")+ songs.get(i-1)+ " ".repeat(77-songs.get(i-1).length())+" │";
+        String out = """
+                ├───────────────────────────────┬─────────────────────┬──────────────────────────┬──────┤
+                │ %-29s │ %-19s │ %-24s │ %-4d │"""
+                .formatted(albumTitle, artist, genre, year);
+        // List songs in the order they were added to the arraylist with its index (1-indexed)
+        for (int i = 0; i < songs.size(); i++) {
+            out+= String.format("\n│     %-3s %-77s │", (i + 1) + ".", songs.get(i)); 
         }
         return out;
     }
+
 }
