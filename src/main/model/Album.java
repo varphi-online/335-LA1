@@ -44,7 +44,7 @@ public class Album {
                View.format(genre, 25) + " │ " + year + " │";
         out += "\n├" + "─".repeat(31) +"┴" + "─".repeat(21) + "┴" + "─".repeat(26) + "┴" + "─".repeat(6) + "┤";
         for (int i=1; i<=songs.size(); i++) {
-            out += "\n│     " +i+". "+ songs.get(i-1)+ " ".repeat(79-songs.get(i-1).length()-Integer.toString(i).length()) + " │";
+            out += "\n│     " +i+". "+(Integer.toString(i).length()<2?" ":"")+ songs.get(i-1)+ " ".repeat(77-songs.get(i-1).length())+" │";
         }
         return out;
     }

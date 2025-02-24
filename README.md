@@ -1,35 +1,46 @@
 # 335-LA1
 Long Assignment 1 for CSC335 (University of Arizona)
 
-https://mermaid.js.org/syntax/classDiagram.html
 
-## Todo:
-- Albums should print all of the songs attached to them
-- List of favorites
+
+## Compile to Jar
+```bash
+javac -d out -sourcepath src src/main/controller/Controller.java &&
+jar cfm app.jar MANIFEST.MF -C out .
+```
+
+Then run: `java -jar app.jar`
 
 ```mermaid
 ---
 title: Model UML Diagram
 ---
 classDiagram
-    class Song {
-        -String title
-        -int Rating
-        +getRating() int
-        +setRating(int rating)
-        +getTitle() String
-    }
-
     class Album {
-        -String albumTitle
-        -String artist
-        -String Genre
-        -int Year
+        #String albumTitle
+        #String artist
+        #String Genre
+        #int Year
+        -Arraylist~String~ songs
         +getAlbumTitle() String
         +getArtist() String
         +getGenre() String
         +getYear() int
+        +addSong(String song)
     }
+
+    class Song {
+        -String title
+        -Optional~int~ rating
+        -Boolean favorite
+        +getRating() Optional~int~
+        +setRating(int rating)
+        +getTitle() String
+        +getFavorite() Boolean
+        +setFavorite()
+    }
+
+    Album <|-- Song : extends
 
     class Playlist {
         -ArrayList~Song~ songs
@@ -39,12 +50,12 @@ classDiagram
         +addSong(Song song)
         +removeSong(Song song)
     }
-
-    Album <|-- Song : extends
-
+    
     class MusicStore {
         #ArrayList~Album~ albums
         #ArrayList~Song~ songs
+        +addAlbum()
+        +addSong()
         +findAlbumTitle(String title) ArrayList~Album~
         +findAlbumArtist(String name) ArrayList~Album~
         +findSongTitle(String title) ArrayList~Song~
@@ -53,10 +64,11 @@ classDiagram
 
     class LibraryModel {
         -ArrayList~Playlist~ playlists
-        -ArrayList~Song~ favorites
         +addPlaylist(String name)
         +findPlaylist(String name) Playlist
+        +getFavorites() Arraylist~Playlist~
     }
 
     LibraryModel <|-- MusicStore : extends
 ```
+https://mermaid.js.org/syntax/classDiagram.html

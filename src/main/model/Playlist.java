@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import main.view.View;
 
 public class Playlist {
-    private ArrayList<Song> songs;
-    private String name;
+    private final ArrayList<Song> songs;
+    private final String name;
 
     public Playlist(String name) {
         this.name = name;
