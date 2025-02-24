@@ -7,7 +7,7 @@ public class Album {
     protected final String artist;
     protected final String genre;
     protected final int year;
-    private final ArrayList<String> songs = new ArrayList<>();
+    private ArrayList<String> songs = new ArrayList<>();
 
     public Album(String albumTitle, String artist, String genre, int year) {
         this.albumTitle = albumTitle;
@@ -21,12 +21,20 @@ public class Album {
         this.artist = album.artist;
         this.genre = album.genre;
         this.year = album.year;
+        this.songs = album.getSongList();
     }
 
     public String getAlbumTitle() {
         return albumTitle;
     }
 
+    public ArrayList<String> getSongList(){
+        ArrayList<String> out = new ArrayList<>();
+        for (String song : songs){
+            out.add(song);
+        }
+        return out;
+    }
     public String getArtist() {
         return artist;
     }
@@ -47,7 +55,8 @@ public class Album {
     public String toString() {
         String out = """
                 ├───────────────────────────────┬─────────────────────┬──────────────────────────┬──────┤
-                │ %-29s │ %-19s │ %-24s │ %-4d │"""
+                │ %-29s │ %-19s │ %-24s │ %-4d │
+                ├───────────────────────────────┴─────────────────────┴──────────────────────────┴──────┤"""
                 .formatted(albumTitle, artist, genre, year);
         // List songs in the order they were added to the arraylist with its index (1-indexed)
         for (int i = 0; i < songs.size(); i++) {

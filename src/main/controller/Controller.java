@@ -45,13 +45,14 @@ public class Controller {
         String genre = albumInfo[2];
         int year = Integer.parseInt(albumInfo[3]);
         Album album = new Album(albumTitle, artist, genre, year);
-        musicStore.addAlbum(album);
+        
         while ((line = br.readLine()) != null) {
             String title = line;
             Song song = new Song(title, album);
             album.addSong(title);
             musicStore.addSong(song);
         }
+        musicStore.addAlbum(album);
         br.close();
     }
 
@@ -123,7 +124,6 @@ public class Controller {
                     } else {
                         view.alert("Album not found");
                     }
-                    ;
                 }
                 case 's' -> {
                     store.findSongTitle(query).forEach(s -> libraryModel.addSong(s));
