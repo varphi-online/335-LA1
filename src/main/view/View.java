@@ -11,6 +11,10 @@ import main.model.Song;
 public class View {
     private static Boolean mode = true; // true = musicStore, false = library
 
+    /**
+     * Main UI loop
+     * @param controller
+     */
     public void UI(Controller controller) {
         Scanner main = new Scanner(System.in);
         clearScreen();
@@ -121,9 +125,4 @@ public class View {
                         └─────────────────────────────────────────────────────┴───────────────────────────────────────────────────────┘\n\n""");
     }
 
-    public static String fmt(String str, int n) {
-        String s = str.substring(0, Math.min(n - 1, str.length()));
-        int padding = Math.max(0, n - s.length() - 1);
-        return s + " ".repeat(padding);
-    }
 }

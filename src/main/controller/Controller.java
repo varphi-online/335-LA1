@@ -11,6 +11,11 @@ import main.model.Playlist;
 import main.model.Song;
 import main.view.View;
 
+/**
+ * Controller class for the Music Store application
+ * Creates View and Models, linking View inputs back 
+ * to itself for processing of Model(s)
+ */
 public class Controller {
     private static MusicStore musicStore;
     private static LibraryModel libraryModel;
@@ -23,6 +28,11 @@ public class Controller {
         view.UI(controller);
     }
 
+    /**
+     * Constructor for Controller
+     * Initializes the MusicStore and LibraryModel from the albums.txt file
+     * @throws IOException
+     */
     public Controller() throws IOException {
         musicStore = new MusicStore();
         File file = new File("./albums/albums.txt");
@@ -36,6 +46,11 @@ public class Controller {
         br.close();
     }
 
+    /**
+     * Parses provided album file and adds it to the MusicStore
+     * @param file
+     * @throws IOException
+     */
     private void parseAlbum(File file) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(file));
         String line = br.readLine();
@@ -59,6 +74,12 @@ public class Controller {
         return musicStore;
     }
 
+    /*
+     * Handles input from the View, dispatching 
+     * operation to the selected store
+     * @param input
+     * @param mode
+     */
     public void handleInput(String input, Boolean mode) {
         if (mode) {
             dispatchCommand(input, musicStore);
@@ -67,6 +88,13 @@ public class Controller {
         }
     }
 
+    /**
+     * Dispatches the command to the appropriate 
+     * method, operating on the correct store T
+     * @param <T>
+     * @param input
+     * @param store
+     */
     @SuppressWarnings("UseSpecificCatch")
     public <T extends MusicStore> void dispatchCommand(String input, T store) {
         if (input.length() >= 2) {
@@ -90,9 +118,13 @@ public class Controller {
         }
     }
 
-    public void library(String input) {
-    }
-
+    /**
+     * Process user command as a search command
+     * @param <T>
+     * @param command
+     * @param query
+     * @param store
+     */
     private <T extends MusicStore> void search(String command, String query, T store) {
         switch (command.charAt(1)) {
             case 'a' -> view.printResults(store.findAlbumTitle(query));
@@ -110,6 +142,13 @@ public class Controller {
         }
     }
 
+    /**
+     * Process user command as an add command
+     * @param <T>
+     * @param command
+     * @param query
+     * @param store
+     */
     private <T extends MusicStore> void add(String command, String query, T store) {
         if (!(store instanceof LibraryModel)) {
             switch (command.charAt(1)) {
@@ -173,6 +212,13 @@ public class Controller {
         }
     }
 
+    /*
+     * Process user command as a remove command
+     * @param <T>
+     * @param command
+     * @param query
+     * @param store
+     */
     private <T extends MusicStore> void remove(String command, String query, T store) {
         if (command.charAt(1) == 'p' && store instanceof LibraryModel) {
             String[] playlistQuery = query.split(":");
@@ -192,6 +238,13 @@ public class Controller {
         }
     }
 
+    /*
+     * Process user command as a rate command
+     * @param <T>
+     * @param command
+     * @param query
+     * @param store
+     */
     private <T extends MusicStore> void rate(String command, String query, T store) {
         if (command.charAt(1) == 's' && store instanceof LibraryModel) {
             String[] songQuery = query.split("\\s+");
@@ -221,6 +274,13 @@ public class Controller {
         }
     }
 
+    /*
+     * Process user command as a favorite command
+     * @param <T>
+     * @param command
+     * @param query
+     * @param store
+     */
     private <T extends MusicStore> void favorite(String command, String query, T store) {
         if (command.length() == 1) {
             view.printResults(libraryModel.getFavorites());

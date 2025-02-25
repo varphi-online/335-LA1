@@ -46,6 +46,9 @@ public class Song extends Album {
         this.favorite = value;
     }
 
+    /**
+     * Pretty print format for View
+     */
     public String toString() {
         return String.format(
                 "│ %-40s │ %-24s │ %-29s │ %-5.5s │ %-4d │   %-4s │ %s",

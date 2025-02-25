@@ -51,6 +51,9 @@ public class Album {
         songs.add(song);
     }
 
+    /**
+     * Pretty print format for View
+     */
     @Override
     public String toString() {
         String out = """

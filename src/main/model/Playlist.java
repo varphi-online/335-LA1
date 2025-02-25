@@ -28,6 +28,9 @@ public class Playlist {
         songs.remove(song);
     }
 
+    /**
+     * Pretty print format for View
+     */
     @Override
     public String toString() {
         // I couldnt figure out a nice formatting method that would center
