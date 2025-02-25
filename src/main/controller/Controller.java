@@ -45,7 +45,6 @@ public class Controller {
         String genre = albumInfo[2];
         int year = Integer.parseInt(albumInfo[3]);
         Album album = new Album(albumTitle, artist, genre, year);
-        
         while ((line = br.readLine()) != null) {
             String title = line;
             Song song = new Song(title, album);

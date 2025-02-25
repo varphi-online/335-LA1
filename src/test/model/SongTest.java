@@ -50,6 +50,6 @@ class SongTest {
 	
 	@Test
 	void printTest() {
-		assertEquals(foundationSong.toString(), "│ Money                                    │ Pink Floyd               │ Dark Side of the Moon         │ Psych │ 1973 │        │");
+		assertEquals(foundationSong.toString(), "│ Money                                    │ Pink Floyd               │ Dark Side of the Moon         │ Psych │ 1973 │        │ ");
 	}
 }
