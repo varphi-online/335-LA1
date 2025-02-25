@@ -26,7 +26,7 @@ class LibraryModelTest {
 		foundationLibraryModel.addSong(foundationSong);
 		foundationSong.setFavorite(true);
 		// Test against non-favorited song to assure object uniqueness
-		assertNotEquals(foundationLibraryModel.getFavorites().get(0).toString(), new Song("Take It All",foundationAlbum).toString());
+		assertNotEquals(foundationLibraryModel.getFavorites(), new Song("Take It All",foundationAlbum).getFavorite());
 	}
 	
 	@Test
