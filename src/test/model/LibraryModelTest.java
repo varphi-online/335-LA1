@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.annotation.Testable;
 
 import main.model.Album;
 import main.model.LibraryModel;
@@ -12,6 +13,7 @@ import main.model.MusicStore;
 import main.model.Playlist;
 import main.model.Song;
 
+@Testable
 class LibraryModelTest {
 	private LibraryModel foundationLibraryModel = new LibraryModel();
 	private Album foundationAlbum = new Album("21", "Adele", "Pop", 2011);
