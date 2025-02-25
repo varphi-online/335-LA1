@@ -1,12 +1,13 @@
 # 335-LA1
 Long Assignment 1 for CSC335 (University of Arizona)
 
+***IMPORTANT!! THE UML DIAGRAM IS PROGRAMATCIALLY RENDERED WITH MERMAIDJS. GO TO THE [GITHUB](https://github.com/varphi-online/335-LA1/tree/main) TO VIEW***
 
 
 ## Compile to Jar
 ```bash
 javac -d out -sourcepath src src/main/controller/Controller.java &&
-jar cfm app.jar MANIFEST.MF -C out .
+jar cfm app.jar MANIFEST.MF -C out . -C src . README.md && java -jar app.jar
 ```
 
 Then run: `java -jar app.jar`
