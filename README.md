@@ -1,10 +1,16 @@
+**_IMPORTANT!! THE UML DIAGRAM IS PROGRAMATCIALLY RENDERED WITH MERMAIDJS. GO TO THE [GITHUB](https://github.com/varphi-online/335-LA1/tree/main) TO VIEW_**
+
 # 335-LA1
-Long Assignment 1 for CSC335 (University of Arizona)
 
-***IMPORTANT!! THE UML DIAGRAM IS PROGRAMATCIALLY RENDERED WITH MERMAIDJS. GO TO THE [GITHUB](https://github.com/varphi-online/335-LA1/tree/main) TO VIEW***
+Long Assignment 1 for CSC335 @ UofA
 
+## Group Members
+
+- Gabe Venegas
+- Aidan Fuhrmann
 
 ## Compile to Jar
+
 ```bash
 javac -d out -sourcepath src src/main/controller/Controller.java &&
 jar cfm app.jar MANIFEST.MF -C out . -C src . README.md && java -jar app.jar
@@ -12,6 +18,7 @@ jar cfm app.jar MANIFEST.MF -C out . -C src . README.md && java -jar app.jar
 
 Then run: `java -jar app.jar`
 
+## UML Diagram
 ```mermaid
 ---
 title: Model UML Diagram
@@ -51,7 +58,7 @@ classDiagram
         +addSong(Song song)
         +removeSong(Song song)
     }
-    
+
     class MusicStore {
         #ArrayList~Album~ albums
         #ArrayList~Song~ songs
@@ -72,4 +79,5 @@ classDiagram
 
     LibraryModel <|-- MusicStore : extends
 ```
+
 https://mermaid.js.org/syntax/classDiagram.html
