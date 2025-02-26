@@ -4,14 +4,14 @@
 
 Long Assignment 1 for CSC335 @ UofA
 
-## Video Demo
-
-https://youtu.be/hiYw2NL6WNc
-
 ## Group Members
 
 - Gabe Venegas
 - Aidan Fuhrmann
+
+## Video Demo
+
+https://youtu.be/o09k_JYGhto
 
 ## Compile to Jar
 
