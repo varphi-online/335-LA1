@@ -11,7 +11,7 @@ Long Assignment 1 for CSC335 @ UofA
 
 ## Video Demo
 
-https://youtu.be/o09k_JYGhto
+https://youtu.be/NpC1GahpR-s
 
 ## Compile to Jar
 
