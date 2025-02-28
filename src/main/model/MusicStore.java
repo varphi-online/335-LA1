@@ -39,12 +39,10 @@ public class MusicStore {
         return foundAlbums;
     }
 
-    // Need to return mutable song to rate and add favorites, as well as 
-    // share mutablity between the store itsself and playlists
     public ArrayList<Song> findSongTitle(String title) {
         ArrayList<Song> foundSongs = new ArrayList<>();
         songs.stream().filter(song -> song.getTitle().toLowerCase().contains(title.toLowerCase()))
-                .forEach(song -> foundSongs.add(song));
+                .forEach(song -> foundSongs.add(new Song(song)));
         return foundSongs;
     }
 

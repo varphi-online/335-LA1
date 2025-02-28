@@ -23,6 +23,16 @@ public class LibraryModel extends MusicStore {
         return found;
     }
 
+    // Need to return mutable song to rate and add favorites, as well as 
+    // share mutablity between the store itsself and playlists
+    @Override
+    public ArrayList<Song> findSongTitle(String title) {
+        ArrayList<Song> foundSongs = new ArrayList<>();
+        songs.stream().filter(song -> song.getTitle().toLowerCase().contains(title.toLowerCase()))
+                .forEach(song -> foundSongs.add(song));
+        return foundSongs;
+    }
+
     /* We have to return an array of mutable references because the controller 
      * uses this method to add songs, which mutates it. 
      */
