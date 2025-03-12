@@ -79,6 +79,21 @@ class LibraryModelTest {
         assertEquals(song2, recentSongs.get(2));
 	}
 
+	@Test
+	void playSongTest() {
+		foundationLibraryModel.addSong(foundationSong);
+		assertTrue(foundationLibraryModel.playSong("Take It All"));
+		assertFalse(foundationLibraryModel.playSong("Not a Song"));
+		assertEquals(foundationLibraryModel.getNowPlaying(), foundationSong);
+	}
+
+	@Test void getNowPlayingTest() {
+		assertNull(foundationLibraryModel.getNowPlaying());
+		foundationLibraryModel.addSong(foundationSong);
+		foundationLibraryModel.playSong("Take It All");
+		assertEquals(foundationLibraryModel.getNowPlaying(), foundationSong);
+	}
+
 	/**
      * Helper func to cause intentional delay in ms
      */
