@@ -3,10 +3,25 @@ import java.util.ArrayList;
 
 public class LibraryModel extends MusicStore {
     private final ArrayList<Playlist> playlists;
+    private Song nowPlaying;
 
     public LibraryModel() {
         super();
         this.playlists = new ArrayList<>();
+    }
+
+    public boolean playSong(String title) {
+        ArrayList<Song> songs = findSongTitle(title);
+        if (!songs.isEmpty()) {
+            nowPlaying = songs.get(0);
+            nowPlaying.play();
+            return true;
+        }
+        return false;
+    }
+
+    public Song getNowPlaying() {
+        return nowPlaying;
     }
 
     public void addPlaylist(String name) {

@@ -117,10 +117,12 @@ public class View {
                         │      + : Add           (Exact)                      │      s <title>    -    Song by title                  │
                         │      - : Remove        (Exact)                      │      A <artist>   -    Album by artist                │
                         │      * : Rate          (Exact)                      │      S <artist>   -    Song by artist                 │
-                        │      # : Favorite      (Exact, Toggle, Search)      │      p <name> : <?song name>                          │
-                        │      h : Help                                       │          └ Playlist by name : (optional) w/ song      │
-                        │      q : Quit                                       │                                                       │
-                        │      m : Switch Mode   (MusicStore/Library)         │                                                       │
+                        │      # : Favorite      (Exact, Toggle, Search)      │      n            -    Recent Played Songs            │
+                        │      h : Help                                       │      N            -    Top Played Songs               │
+                        │      q : Quit                                       │      p <name> : <?song name>                          │
+                        │      m : Switch Mode   (MusicStore/Library)         │          └ Playlist by name : (optional) w/ song      │
+                        │      p : Play                                       │                                                       │
+                        │                                                     │                                                       │
                         │                                                     │                                                       │
                         └─────────────────────────────────────────────────────┴───────────────────────────────────────────────────────┘\n\n""");
     }

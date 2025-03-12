@@ -107,6 +107,7 @@ public class Controller {
                 case '-' -> remove(command, query, store);
                 case '*' -> rate(command, query, store);
                 case '#' -> favorite(command, query, store);
+                case 'p' -> play(command, query, store);
                 default -> view.invalid();
             }
         } else {
@@ -134,6 +135,20 @@ public class Controller {
             case 'p' -> {
                 if (store instanceof LibraryModel) {
                     view.printResults(libraryModel.findPlaylist(query));
+                } else {
+                    view.invalid();
+                }
+            }
+            case 'n' -> {
+                if (store instanceof LibraryModel) {
+                    view.printResults(libraryModel.getMostRecentSongs());
+                } else {
+                    view.invalid();
+                }
+            }
+            case 'N' -> {
+                if (store instanceof LibraryModel) {
+                    view.printResults(libraryModel.getTopPlayedSongs());
                 } else {
                     view.invalid();
                 }
@@ -302,6 +317,28 @@ public class Controller {
 
         } else {
             view.invalid();
+        }
+    }
+
+    private <T extends MusicStore> void play(String command, String query, T store) {
+        // If not "ps" && lib, invalid
+        if (!(command.charAt(1) == 's' && store instanceof LibraryModel)) {
+            view.invalid();
+            return;
+        }
+        // If no query, print current
+        if (query.isEmpty()) {
+            Song song = libraryModel.getNowPlaying();
+            view.alert("Currently playing: " + (song == null ? "None" : song.getTitle()));
+            return;
+        }
+        // Attempt to play input song
+        String songTitle = query;
+        boolean success = libraryModel.playSong(songTitle);
+        if (success) { 
+            view.alert("Now Playing: " + libraryModel.getNowPlaying().getTitle());
+        } else {
+            view.alert("Song not found.");
         }
     }
 }
