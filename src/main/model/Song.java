@@ -1,11 +1,14 @@
 package main.model;
 
+import java.sql.Timestamp;
 import java.util.Optional;
 
 public class Song extends Album {
     private final String title;
     private Optional<Integer> rating = Optional.empty();
     private Boolean favorite = false;
+    private int playCount = 0;
+    private Timestamp lastPlayed = new Timestamp(System.currentTimeMillis());
 
     public Song(String t, Album album) {
         super(album.getAlbumTitle(), album.getArtist(), album.getGenre(), album.getYear());
@@ -16,6 +19,22 @@ public class Song extends Album {
         super(song.getAlbumTitle(), song.getArtist(), song.getGenre(), song.getYear());
         title = song.getTitle();
         rating = song.getRating();
+        favorite = song.getFavorite();
+        playCount = song.getPlayCount();
+        lastPlayed = song.getLastPlayed();
+    }
+
+    public void play() {
+        playCount++;
+        lastPlayed = new Timestamp(System.currentTimeMillis());
+    }
+
+    public int getPlayCount() {
+        return playCount;
+    }
+
+    public Timestamp getLastPlayed() {
+        return lastPlayed;
     }
 
     public Optional<Integer> getRating() {

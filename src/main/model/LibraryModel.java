@@ -16,6 +16,20 @@ public class LibraryModel extends MusicStore {
     public void addPlaylist(Playlist playlist) {
         playlists.add(playlist);
     }
+
+    public ArrayList<Song> getTopPlayedSongs() {
+        ArrayList<Song> found = new ArrayList<>(songs);
+        found.sort((s1, s2) -> s2.getPlayCount() - s1.getPlayCount());
+        found = new ArrayList<>(found.subList(0, Math.min(10, found.size())));
+        return found;
+    }
+
+    public ArrayList<Song> getMostRecentSongs() {
+        ArrayList<Song> found = new ArrayList<>(songs);
+        found.sort((s1, s2) -> s2.getLastPlayed().compareTo(s1.getLastPlayed()));
+        found = new ArrayList<>(found.subList(0, Math.min(10, found.size())));
+        return found;
+    }
     
     public ArrayList<Song> getFavorites() {
         ArrayList<Song> found = new ArrayList<>();
