@@ -322,7 +322,7 @@ public class Controller {
 
     private <T extends MusicStore> void play(String command, String query, T store) {
         // If not "ps" && lib, invalid
-        if (!(command.charAt(1) == 's' && store instanceof LibraryModel)) {
+        if (command.length() != 2 || !(command.charAt(1) == 's' && store instanceof LibraryModel)) {
             view.invalid();
             return;
         }
