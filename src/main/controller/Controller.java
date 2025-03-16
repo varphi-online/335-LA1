@@ -153,6 +153,7 @@ public class Controller {
                     view.invalid();
                 }
             }
+            case 'r' -> view.printResults(store.findSongRating(null));
             default -> view.invalid();
         }
     }
