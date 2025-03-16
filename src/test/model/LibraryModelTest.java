@@ -2,7 +2,6 @@ package test.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -11,7 +10,6 @@ import org.junit.platform.commons.annotation.Testable;
 
 import main.model.Album;
 import main.model.LibraryModel;
-import main.model.MusicStore;
 import main.model.Playlist;
 import main.model.Song;
 
