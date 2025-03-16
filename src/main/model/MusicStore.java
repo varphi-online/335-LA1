@@ -43,6 +43,7 @@ public class MusicStore {
         ArrayList<Song> foundSongs = new ArrayList<>();
         songs.stream().filter(song -> song.getTitle().toLowerCase().contains(title.toLowerCase()))
                 .forEach(song -> foundSongs.add(new Song(song)));
+        foundSongs.sort((s1, s2) -> s1.getTitle().compareTo(s2.getTitle()));  // sort ascending by title
         return foundSongs;
     }
 
@@ -50,6 +51,21 @@ public class MusicStore {
         ArrayList<Song> foundSongs = new ArrayList<>();
         songs.stream().filter(song -> song.getArtist().toLowerCase().contains(name.toLowerCase()))
                 .forEach(song -> foundSongs.add(new Song(song)));
+        foundSongs.sort((s1, s2) -> s1.getArtist().compareTo(s2.getArtist()));  // sort ascending by artist
+        return foundSongs;
+    }
+
+    public ArrayList<Song> findSongRating(Integer rating) {
+        ArrayList<Song> foundSongs = new ArrayList<>();
+        if (rating != null) {
+            // get by rating
+            songs.stream().filter(song -> song.getRating().orElse(0).equals(rating))
+                    .forEach(song -> foundSongs.add(new Song(song)));
+        } else {
+            // get all songs, sort by rating descending
+            songs.forEach(song -> foundSongs.add(new Song(song)));
+            foundSongs.sort((s1, s2) -> s2.getRating().orElse(0).compareTo(s1.getRating().orElse(0)));
+        }
         return foundSongs;
     }
 

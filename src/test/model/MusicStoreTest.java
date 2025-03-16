@@ -3,6 +3,7 @@ package test.model;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
@@ -46,6 +47,42 @@ class MusicStoreTest {
 	@Test
 	void songByTitleTest() {
 		assertEquals(foundationMusicStore.findSongTitle("Take It All").get(0).toString(), foundationSong.toString());
+	}
+
+	@Test
+	void songByRatingAllTest() {
+		Song song1 = new Song("Rolling in the Deep", foundationAlbum);
+		Song song2 = new Song("Someone Like You", foundationAlbum);
+		Song song3 = new Song("Set Fire to the Rain", foundationAlbum);
+		song1.setRating(5);
+		song2.setRating(3);
+		song3.setRating(4);
+		foundationMusicStore.addSong(song1);
+		foundationMusicStore.addSong(song2);
+		foundationMusicStore.addSong(song3);
+		// expect song order 1,3,2
+		ArrayList<Song> foundSongs = foundationMusicStore.findSongRating(null);
+		assertEquals(foundSongs.get(0).toString(), song1.toString());
+		assertEquals(foundSongs.get(1).toString(), song3.toString());
+		assertEquals(foundSongs.get(2).toString(), song2.toString());
+	}
+
+	@Test
+	void songByRatingTest() {
+		Song song1 = new Song("Rolling in the Deep", foundationAlbum);
+		Song song2 = new Song("Someone Like You", foundationAlbum);
+		Song song3 = new Song("Set Fire to the Rain", foundationAlbum);
+		song1.setRating(5);
+		song2.setRating(4);
+		song3.setRating(4);
+		foundationMusicStore.addSong(song1);
+		foundationMusicStore.addSong(song2);
+		foundationMusicStore.addSong(song3);
+		// expect song order 2,3
+		ArrayList<Song> foundSongs = foundationMusicStore.findSongRating(4);
+		assertEquals(foundSongs.get(0).toString(), song2.toString());
+		assertEquals(foundSongs.get(1).toString(), song3.toString());
+		assertEquals(foundSongs.size(), 2);
 	}
 
 }
