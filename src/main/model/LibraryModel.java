@@ -32,6 +32,24 @@ public class LibraryModel extends MusicStore {
         playlists.add(playlist);
     }
 
+    public boolean removeSong(String title) {
+        ArrayList<Song> found = findSongTitle(title);
+        boolean status = !found.isEmpty();
+        if (status) {
+            songs.remove(found.get(0));
+        }
+        return status;
+    }
+
+    public boolean removeAlbum(String title) {
+        ArrayList<Album> found = findAlbumTitle(title);
+        boolean status = !found.isEmpty();
+        if (status) {
+            albums.remove(found.get(0));
+        }
+        return status;
+    }
+
     public ArrayList<Song> getTopPlayedSongs() {
         ArrayList<Song> found = new ArrayList<>(songs);
         found.sort((s1, s2) -> s2.getPlayCount() - s1.getPlayCount());

@@ -248,7 +248,28 @@ public class Controller {
             } else {
                 view.invalid();
             }
-        } else {
+        } 
+        else if (command.charAt(1) == 'a' && store instanceof LibraryModel) {
+            String albumTitle = query;
+            try {
+                Album album = libraryModel.findAlbumTitle(albumTitle).get(0);
+                libraryModel.removeAlbum(album.getAlbumTitle());
+                view.alert("Removed album: "+album.getAlbumTitle()+" from Library.");
+            } catch (Exception e) {
+                view.error(e);
+            }
+        }
+        else if (command.charAt(1) == 's' && store instanceof LibraryModel) {
+            String songTitle = query;
+            try {
+                Song song = libraryModel.findSongTitle(songTitle).get(0);
+                libraryModel.removeSong(song.getTitle());
+                view.alert("Removed song: "+song.getTitle()+" from Library.");
+            } catch (Exception e) {
+                view.error(e);
+            }
+        }
+        else {
             view.invalid();
         }
     }
