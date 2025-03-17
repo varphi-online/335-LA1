@@ -95,17 +95,17 @@ class LibraryModelTest {
 	@Test 
 	void removeSongTest() {
 		foundationLibraryModel.addSong(foundationSong);
-		assertTrue(foundationLibraryModel.removeSong("Take It All"));
-		assertFalse(foundationLibraryModel.removeSong("Not a Song"));
-		assertEquals(foundationLibraryModel.getNowPlaying(), null);
+		foundationLibraryModel.removeSong("Take It All");
+		foundationLibraryModel.removeSong("Not a Song");
+		assertEquals(foundationLibraryModel.findSongArtist(""), new ArrayList<Song>());
 	}
 
 	@Test 
 	void removeAlbumTest() {
 		foundationLibraryModel.addAlbum(foundationAlbum);
-		assertTrue(foundationLibraryModel.removeAlbum("21"));
-		assertFalse(foundationLibraryModel.removeAlbum("Not an Album"));
-		assertEquals(foundationLibraryModel.getNowPlaying(), null);
+		foundationLibraryModel.removeAlbum("21");
+		foundationLibraryModel.removeAlbum("Not an Album");
+		assertEquals(foundationLibraryModel.findAlbumArtist(""), new ArrayList<Album>());
 	}
 
 	/**

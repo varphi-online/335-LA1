@@ -32,22 +32,16 @@ public class LibraryModel extends MusicStore {
         playlists.add(playlist);
     }
 
-    public boolean removeSong(String title) {
-        ArrayList<Song> found = findSongTitle(title);
-        boolean status = !found.isEmpty();
-        if (status) {
-            songs.remove(found.get(0));
-        }
-        return status;
+    public void removeSong(String title) {
+        ArrayList<Song> found = new ArrayList<>();
+        songs.stream().filter(s -> s.getTitle().equals(title)).forEach(s -> found.add(s));
+        found.forEach(s -> songs.remove(s));
     }
 
-    public boolean removeAlbum(String title) {
-        ArrayList<Album> found = findAlbumTitle(title);
-        boolean status = !found.isEmpty();
-        if (status) {
-            albums.remove(found.get(0));
-        }
-        return status;
+    public void removeAlbum(String title) {
+        ArrayList<Album> found = new ArrayList<>();
+        albums.stream().filter(a -> a.getAlbumTitle().equals(title)).forEach(a -> found.add(a));
+        found.forEach(a -> albums.remove(a));
     }
 
     public ArrayList<Song> getTopPlayedSongs() {
