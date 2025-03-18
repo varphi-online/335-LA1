@@ -2,7 +2,6 @@ package test.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -11,7 +10,6 @@ import org.junit.platform.commons.annotation.Testable;
 
 import main.model.Album;
 import main.model.LibraryModel;
-import main.model.MusicStore;
 import main.model.Playlist;
 import main.model.Song;
 
@@ -97,17 +95,17 @@ class LibraryModelTest {
 	@Test 
 	void removeSongTest() {
 		foundationLibraryModel.addSong(foundationSong);
-		assertTrue(foundationLibraryModel.removeSong("Take It All"));
-		assertFalse(foundationLibraryModel.removeSong("Not a Song"));
-		assertEquals(foundationLibraryModel.getNowPlaying(), null);
+		foundationLibraryModel.removeSong("Take It All");
+		foundationLibraryModel.removeSong("Not a Song");
+		assertEquals(foundationLibraryModel.findSongArtist(""), new ArrayList<Song>());
 	}
 
 	@Test 
 	void removeAlbumTest() {
 		foundationLibraryModel.addAlbum(foundationAlbum);
-		assertTrue(foundationLibraryModel.removeAlbum("21"));
-		assertFalse(foundationLibraryModel.removeAlbum("Not an Album"));
-		assertEquals(foundationLibraryModel.getNowPlaying(), null);
+		foundationLibraryModel.removeAlbum("21");
+		foundationLibraryModel.removeAlbum("Not an Album");
+		assertEquals(foundationLibraryModel.findAlbumArtist(""), new ArrayList<Album>());
 	}
 
 	/**

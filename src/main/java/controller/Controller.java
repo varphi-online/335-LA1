@@ -118,6 +118,7 @@ public class Controller {
                 case '*' -> rate(command, query, store);
                 case '#' -> favorite(command, query, store);
                 case 'p' -> play(command, query, store);
+                case '&' -> shuffle(command, query, store);
                 default -> view.invalid();
             }
         } else {
@@ -163,6 +164,8 @@ public class Controller {
                     view.invalid();
                 }
             }
+            case 'g' -> view.printResults(store.findSongGenre(query));
+            case 'f' -> view.printResults(store.findAlbumSong(query));
             case 'r' -> view.printResults(store.findSongRating(null));
             default -> view.invalid();
         }
@@ -372,5 +375,14 @@ public class Controller {
         } else {
             view.alert("Song not found.");
         }
+    }
+
+    private <T extends MusicStore> void shuffle(String command, String query, T store) {
+        if (command.length() != 2 || !(command.charAt(1) == 's' && store instanceof LibraryModel)) {
+            view.invalid();
+            return;
+        }
+        libraryModel.shuffleSongs();
+        view.alert("Shuffled songs.");
     }
 }
