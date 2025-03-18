@@ -122,7 +122,8 @@ public class View {
                         │      q : Quit                                       │      r            -    By Rating                      │
                         │      m : Switch Mode   (MusicStore/Library)         │      p <name> : <?song name>                          │
                         │      p : Play                                       │          └ Playlist by name : (optional) w/ song      │
-                        │                                                     │                                                       │
+                        │      & : Shuffle                                    │      g            -    Song by Genre                  │
+                        │                                                     │      f            -    Album by Song                  │
                         │                                                     │                                                       │
                         └─────────────────────────────────────────────────────┴───────────────────────────────────────────────────────┘\n\n""");
     }
