@@ -1,12 +1,12 @@
-package main.view;
+package view;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.stream.Collectors;
-import main.controller.Controller;
-import main.model.Album;
-import main.model.Playlist;
-import main.model.Song;
+import controller.Controller;
+import model.Album;
+import model.Playlist;
+import model.Song;
 
 public class View {
     private static Boolean mode = true; // true = musicStore, false = library
@@ -21,7 +21,8 @@ public class View {
         printMenu();
         System.out
                 .print("""
-                        Example:
+                        MAVENNN
+                		Example:
                         $ #                    - Search favorite songs
                         $ *s Take It All -1    - Remove any rating of the song with title "Take It All"
                         $ +p Chill Mix : Money - Add song w/ title "Money" to the "Chill Mix" playlist, or create it if it doesn't exist

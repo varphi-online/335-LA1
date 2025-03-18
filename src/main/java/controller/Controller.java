@@ -1,15 +1,21 @@
-package main.controller;
+package controller;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import main.model.Album;
-import main.model.LibraryModel;
-import main.model.MusicStore;
-import main.model.Playlist;
-import main.model.Song;
-import main.view.View;
+import java.util.HashMap;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import model.Album;
+import model.LibraryModel;
+import model.MusicStore;
+import model.Playlist;
+import model.Song;
+import model.User;
+import view.View;
 
 /**
  * Controller class for the Music Store application
@@ -20,12 +26,14 @@ public class Controller {
     private static MusicStore musicStore;
     private static LibraryModel libraryModel;
     private static View view;
+    private static HashMap<String, User> userDB;
 
     public static void main(String[] args) throws IOException {
         Controller controller = new Controller();
         libraryModel = new LibraryModel();
         view = new View();
         view.UI(controller);
+        
     }
 
     /**
@@ -44,6 +52,8 @@ public class Controller {
             parseAlbum(albumFile);
         }
         br.close();
+        ObjectMapper objectMapper = new ObjectMapper();
+        HashMap<String, User> userDB = objectMapper.readValue(new File("usersData.json"), new TypeReference<HashMap<String, User>>(){});
     }
 
     /**
