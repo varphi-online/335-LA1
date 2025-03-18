@@ -9,6 +9,13 @@ public class Album {
     protected final int year;
     private ArrayList<String> songs = new ArrayList<>();
 
+    public Album() {
+        albumTitle = "";
+        artist = "";
+        genre = "";
+        year = 0;
+    }
+
     public Album(String albumTitle, String artist, String genre, int year) {
         this.albumTitle = albumTitle;
         this.artist = artist;

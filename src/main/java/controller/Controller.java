@@ -3,11 +3,15 @@ package controller;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
 import model.Album;
 import model.LibraryModel;
@@ -19,26 +23,27 @@ import view.View;
 
 /**
  * Controller class for the Music Store application
- * Creates View and Models, linking View inputs back 
+ * Creates View and Models, linking View inputs back
  * to itself for processing of Model(s)
  */
 public class Controller {
     private static MusicStore musicStore;
-    private static LibraryModel libraryModel;
     private static View view;
     private static HashMap<String, User> userDB;
+    private final static ObjectMapper objectMapper = new ObjectMapper().registerModule(new Jdk8Module())
+            .setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
+    private User currentUser;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         Controller controller = new Controller();
-        libraryModel = new LibraryModel();
         view = new View();
         view.UI(controller);
-        
     }
 
     /**
      * Constructor for Controller
      * Initializes the MusicStore and LibraryModel from the albums.txt file
+     * 
      * @throws IOException
      */
     public Controller() throws IOException {
@@ -52,12 +57,14 @@ public class Controller {
             parseAlbum(albumFile);
         }
         br.close();
-        ObjectMapper objectMapper = new ObjectMapper();
-        HashMap<String, User> userDB = objectMapper.readValue(new File("usersData.json"), new TypeReference<HashMap<String, User>>(){});
+        this.userDB = objectMapper.readValue(new File("userData.json"), new TypeReference<HashMap<String, User>>() {
+        });
+        updateDB();
     }
 
     /**
      * Parses provided album file and adds it to the MusicStore
+     * 
      * @param file
      * @throws IOException
      */
@@ -84,23 +91,68 @@ public class Controller {
         return musicStore;
     }
 
+    public void logout() {
+        currentUser = null;
+    }
+
+    public Boolean login(String username, String password) {
+        try {
+            if (User.login("users.csv", username, password)) {
+                currentUser = userDB.get(username);
+                return true;
+            }
+            view.alert("User not found");
+            return false;
+        } catch (Exception e) {
+            view.error(e);
+        }
+        return false;
+    }
+
+    public final void updateDB(){
+        try (FileWriter writer = new FileWriter("userData.json")) {
+            writer.write(objectMapper.writeValueAsString(userDB));
+        } catch (IOException e) {
+            view.error(e);
+        }
+    }
+
+    public Boolean createUser(String username, String password) {
+        try {
+            if (User.login("users.csv", username, password)){
+                view.error(new Exception("User already exists"));
+                return false;
+            }
+            currentUser = new User("users.csv", username, password);
+            userDB.put(username, currentUser);
+            updateDB();
+            return true;
+        } catch (Exception e) {
+            view.error(e);
+        }
+        return false;
+    }
+
     /*
-     * Handles input from the View, dispatching 
+     * Handles input from the View, dispatching
      * operation to the selected store
+     * 
      * @param input
+     * 
      * @param mode
      */
     public void handleInput(String input, Boolean mode) {
         if (mode) {
             dispatchCommand(input, musicStore);
         } else {
-            dispatchCommand(input, libraryModel);
+            dispatchCommand(input, currentUser.getLibrary());
         }
     }
 
     /**
-     * Dispatches the command to the appropriate 
+     * Dispatches the command to the appropriate
      * method, operating on the correct store T
+     * 
      * @param <T>
      * @param input
      * @param store
@@ -128,10 +180,16 @@ public class Controller {
                 view.invalid();
             }
         }
+        try {
+            updateDB();
+        } catch (Exception e) {
+            view.error(e);
+        }
     }
 
     /**
      * Process user command as a search command
+     * 
      * @param <T>
      * @param command
      * @param query
@@ -145,21 +203,21 @@ public class Controller {
             case 'S' -> view.printResults(store.findSongArtist(query));
             case 'p' -> {
                 if (store instanceof LibraryModel) {
-                    view.printResults(libraryModel.findPlaylist(query));
+                    view.printResults(currentUser.getLibrary().findPlaylist(query));
                 } else {
                     view.invalid();
                 }
             }
             case 'n' -> {
                 if (store instanceof LibraryModel) {
-                    view.printResults(libraryModel.getMostRecentSongs());
+                    view.printResults(currentUser.getLibrary().getMostRecentSongs());
                 } else {
                     view.invalid();
                 }
             }
             case 'N' -> {
                 if (store instanceof LibraryModel) {
-                    view.printResults(libraryModel.getTopPlayedSongs());
+                    view.printResults(currentUser.getLibrary().getTopPlayedSongs());
                 } else {
                     view.invalid();
                 }
@@ -173,6 +231,7 @@ public class Controller {
 
     /**
      * Process user command as an add command
+     * 
      * @param <T>
      * @param command
      * @param query
@@ -183,8 +242,8 @@ public class Controller {
             switch (command.charAt(1)) {
                 case 'a' -> {
                     store.findAlbumTitle(query).forEach(a -> {
-                        libraryModel.addAlbum(a);
-                        musicStore.findSongAlbum(a.getAlbumTitle()).forEach(s -> libraryModel.addSong(s));
+                        currentUser.getLibrary().addAlbum(a);
+                        musicStore.findSongAlbum(a.getAlbumTitle()).forEach(s -> currentUser.getLibrary().addSong(s));
                     });
                     if (!store.findAlbumTitle(query).isEmpty()) {
                         view.alert("Added album to Library.");
@@ -193,7 +252,7 @@ public class Controller {
                     }
                 }
                 case 's' -> {
-                    store.findSongTitle(query).forEach(s -> libraryModel.addSong(s));
+                    store.findSongTitle(query).forEach(s -> currentUser.getLibrary().addSong(s));
                     if (!store.findSongTitle(query).isEmpty()) {
                         view.alert("Added song to Library.");
                     } else {
@@ -209,31 +268,32 @@ public class Controller {
                     String s = playlistQuery[i];
                     playlistQuery[i] = s.trim();
                 }
-                boolean exists = !libraryModel.findPlaylist(playlistQuery[0]).isEmpty();
+                boolean exists = !currentUser.getLibrary().findPlaylist(playlistQuery[0]).isEmpty();
                 // If playlist exists, add song to playlist, else just create new playlist
                 if (playlistQuery.length > 1) {
                     if (exists) {
                         try {
-                            Song song = libraryModel.findSongTitle(playlistQuery[1]).get(0);
-                            libraryModel.findPlaylist(playlistQuery[0]).get(0).addSong(song);
-                            view.alert("Added song: "+song+"to"+playlistQuery[0]+".");
+                            Song song = currentUser.getLibrary().findSongTitle(playlistQuery[1]).get(0);
+                            currentUser.getLibrary().findPlaylist(playlistQuery[0]).get(0).addSong(song);
+                            view.alert("Added song: " + song + "to" + playlistQuery[0] + ".");
                         } catch (IndexOutOfBoundsException e) {
                             view.error(e);
                         }
                     } else {
                         Playlist playlist = new Playlist(playlistQuery[0]);
                         try {
-                            Song song = libraryModel.findSongTitle(playlistQuery[1]).get(0);
+                            Song song = currentUser.getLibrary().findSongTitle(playlistQuery[1]).get(0);
                             playlist.addSong(song);
-                            libraryModel.addPlaylist(playlist);
-                            view.alert("Created playlist: "+playlist.getName()+", and added " + song.getTitle()+" to it.");
+                            currentUser.getLibrary().addPlaylist(playlist);
+                            view.alert("Created playlist: " + playlist.getName() + ", and added " + song.getTitle()
+                                    + " to it.");
                         } catch (IndexOutOfBoundsException e) {
                             view.error(e);
                         }
                     }
                 } else {
-                    libraryModel.addPlaylist(new Playlist(playlistQuery[0]));
-                    view.alert("Added playlist: "+playlistQuery[0]+"to Library.");
+                    currentUser.getLibrary().addPlaylist(new Playlist(playlistQuery[0]));
+                    view.alert("Added playlist: " + playlistQuery[0] + "to Library.");
                 }
             } else {
                 view.invalid();
@@ -243,9 +303,13 @@ public class Controller {
 
     /*
      * Process user command as a remove command
+     * 
      * @param <T>
+     * 
      * @param command
+     * 
      * @param query
+     * 
      * @param store
      */
     private <T extends MusicStore> void remove(String command, String query, T store) {
@@ -255,44 +319,45 @@ public class Controller {
                 String s = playlistQuery[i];
                 playlistQuery[i] = s.trim();
             }
-            Playlist playlist = libraryModel.findPlaylist(playlistQuery[0]).get(0);
+            Playlist playlist = currentUser.getLibrary().findPlaylist(playlistQuery[0]).get(0);
             if (playlistQuery.length > 1) {
-                Song song = libraryModel.findSongTitle(playlistQuery[1]).get(0);
+                Song song = currentUser.getLibrary().findSongTitle(playlistQuery[1]).get(0);
                 playlist.removeSong(song);
             } else {
                 view.invalid();
             }
-        } 
-        else if (command.charAt(1) == 'a' && store instanceof LibraryModel) {
+        } else if (command.charAt(1) == 'a' && store instanceof LibraryModel) {
             String albumTitle = query;
             try {
-                Album album = libraryModel.findAlbumTitle(albumTitle).get(0);
-                libraryModel.removeAlbum(album.getAlbumTitle());
-                view.alert("Removed album: "+album.getAlbumTitle()+" from Library.");
+                Album album = currentUser.getLibrary().findAlbumTitle(albumTitle).get(0);
+                currentUser.getLibrary().removeAlbum(album.getAlbumTitle());
+                view.alert("Removed album: " + album.getAlbumTitle() + " from Library.");
             } catch (Exception e) {
                 view.error(e);
             }
-        }
-        else if (command.charAt(1) == 's' && store instanceof LibraryModel) {
+        } else if (command.charAt(1) == 's' && store instanceof LibraryModel) {
             String songTitle = query;
             try {
-                Song song = libraryModel.findSongTitle(songTitle).get(0);
-                libraryModel.removeSong(song.getTitle());
-                view.alert("Removed song: "+song.getTitle()+" from Library.");
+                Song song = currentUser.getLibrary().findSongTitle(songTitle).get(0);
+                currentUser.getLibrary().removeSong(song.getTitle());
+                view.alert("Removed song: " + song.getTitle() + " from Library.");
             } catch (Exception e) {
                 view.error(e);
             }
-        }
-        else {
+        } else {
             view.invalid();
         }
     }
 
     /*
      * Process user command as a rate command
+     * 
      * @param <T>
+     * 
      * @param command
+     * 
      * @param query
+     * 
      * @param store
      */
     private <T extends MusicStore> void rate(String command, String query, T store) {
@@ -304,15 +369,15 @@ public class Controller {
                 songTitle = songQuery[i];
             }
             try {
-                Song song = libraryModel.findSongTitle(songTitle).get(0);
+                Song song = currentUser.getLibrary().findSongTitle(songTitle).get(0);
                 if (songQuery.length > 1) {
                     song.setRating(rating);
-                    view.alert("Set song: \""+song.getTitle()+"\" rating to: "+rating+".");
+                    view.alert("Set song: \"" + song.getTitle() + "\" rating to: " + rating + ".");
                     if (rating == 5) {
                         song.setFavorite(true);
                         view.alert("Added to favorites");
                     }
-                    
+
                 } else {
                     view.invalid();
                 }
@@ -326,22 +391,26 @@ public class Controller {
 
     /*
      * Process user command as a favorite command
+     * 
      * @param <T>
+     * 
      * @param command
+     * 
      * @param query
+     * 
      * @param store
      */
     private <T extends MusicStore> void favorite(String command, String query, T store) {
         if (command.length() == 1) {
-            view.printResults(libraryModel.getFavorites());
+            view.printResults(currentUser.getLibrary().getFavorites());
         } else if (command.charAt(1) == 's' && store instanceof LibraryModel) {
             if (query.isEmpty()) {
-                view.printResults(libraryModel.getFavorites());
+                view.printResults(currentUser.getLibrary().getFavorites());
             } else
                 try {
-                    Song song = libraryModel.findSongTitle(query).get(0);
+                    Song song = currentUser.getLibrary().findSongTitle(query).get(0);
                     song.setFavorite(!song.getFavorite());
-                    if (song.getFavorite()){
+                    if (song.getFavorite()) {
                         view.alert("Added to Favorites.");
                     } else {
                         view.alert("Removed from Favorites.");
@@ -363,15 +432,15 @@ public class Controller {
         }
         // If no query, print current
         if (query.isEmpty()) {
-            Song song = libraryModel.getNowPlaying();
+            Song song = currentUser.getLibrary().getNowPlaying();
             view.alert("Currently playing: " + (song == null ? "None" : song.getTitle()));
             return;
         }
         // Attempt to play input song
         String songTitle = query;
-        boolean success = libraryModel.playSong(songTitle);
-        if (success) { 
-            view.alert("Now Playing: " + libraryModel.getNowPlaying().getTitle());
+        boolean success = currentUser.getLibrary().playSong(songTitle);
+        if (success) {
+            view.alert("Now Playing: " + currentUser.getLibrary().getNowPlaying().getTitle());
         } else {
             view.alert("Song not found.");
         }
@@ -382,7 +451,7 @@ public class Controller {
             view.invalid();
             return;
         }
-        libraryModel.shuffleSongs();
+        currentUser.getLibrary().shuffleSongs();
         view.alert("Shuffled songs.");
     }
 }
