@@ -39,6 +39,13 @@ public class MusicStore {
         return foundAlbums;
     }
 
+    public ArrayList<Album> findAlbumSong(String title) {
+        ArrayList<Album> foundAlbums = new ArrayList<>();
+        songs.stream().filter(s -> s.getTitle().contains(title))
+                .forEach(s -> foundAlbums.add(new Album((Album)s)));
+        return foundAlbums;
+    }
+
     public ArrayList<Song> findSongTitle(String title) {
         ArrayList<Song> foundSongs = new ArrayList<>();
         songs.stream().filter(song -> song.getTitle().toLowerCase().contains(title.toLowerCase()))
@@ -69,10 +76,25 @@ public class MusicStore {
         return foundSongs;
     }
 
+    public ArrayList<Song> findSongGenre(String genre) {
+        ArrayList<Song> foundSongs = new ArrayList<>();
+        songs.stream().filter(song -> song.getGenre().toLowerCase().contains(genre.toLowerCase()))
+                .forEach(song -> foundSongs.add(new Song(song)));
+        return foundSongs;
+    }
+
     public ArrayList<Song> findSongAlbum(String title) {
         ArrayList<Song> foundSongs = new ArrayList<>();
         songs.stream().filter(song -> song.getAlbumTitle().toLowerCase().contains(title.toLowerCase()))
                 .forEach(song -> foundSongs.add(new Song(song)));
         return foundSongs;
+    }
+
+    public void shuffleSongs() {
+        java.util.Collections.shuffle(songs);
+    }
+
+    public ArrayList<Song> getSongs() {
+        return new ArrayList<>(songs);
     }
 }
