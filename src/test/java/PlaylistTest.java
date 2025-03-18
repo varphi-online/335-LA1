@@ -1,13 +1,13 @@
-package test.model;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
 
-import main.model.Album;
-import main.model.Playlist;
-import main.model.Song;
+import model.Album;
+import model.Playlist;
+import model.Song;
 
 @Testable
 class PlaylistTest {
