@@ -85,4 +85,47 @@ class MusicStoreTest {
 		assertEquals(foundSongs.size(), 2);
 	}
 
+	@Test
+	void shuffleSongsTest() {
+        for (int i=0; i<10; i++) {
+            foundationMusicStore.addSong(new Song("Song " + i, foundationAlbum));
+        }
+        ArrayList<Song> before = foundationMusicStore.getSongs();
+        foundationMusicStore.shuffleSongs();
+        ArrayList<Song> after = foundationMusicStore.getSongs();
+        assertNotEquals(before.toString(), after.toString());
+	}
+
+	@Test
+	void findSongGenreTest() {
+		Song song1 = new Song("s1", new Album("t1", "a1", "Alternative", 1));
+		Song song2 = new Song("s2", new Album("t2", "a2", "Rock", 2));
+		foundationMusicStore.addSong(song1);
+		foundationMusicStore.addSong(song2);
+		ArrayList<Song> foundAlt = foundationMusicStore.findSongGenre("Alternative");
+		ArrayList<Song> foundRock = foundationMusicStore.findSongGenre("Rock");
+		assertEquals(foundAlt.size(), 1);
+		assertEquals(foundRock.size(), 1);
+		assertEquals(foundAlt.get(0).toString(), song1.toString());
+		assertEquals(foundRock.get(0).toString(), song2.toString());
+	}
+
+	@Test
+	void findAlbumSongTest() {
+		Album album1 = new Album("t1", "a1", "g1", 1);
+		Album album2 = new Album("t2", "a2", "g2", 2);
+		Song song1 = new Song("s1", album1);
+		Song song2 = new Song("s2", album2);
+		foundationMusicStore.addSong(song1);
+		foundationMusicStore.addSong(song2);
+		ArrayList<Album> found = foundationMusicStore.findAlbumSong("s1");
+		assertEquals(found.size(), 1);
+		assertEquals(found.get(0).toString(), album1.toString());
+	}
+
+	@Test
+	void getSongsTest() {
+		assertEquals(foundationMusicStore.getSongs().get(0).toString(), foundationSong.toString());
+	}
+
 }
