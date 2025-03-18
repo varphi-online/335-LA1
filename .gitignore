@@ -1,4 +1,1 @@
-/bin/
-/out/
-*.class
-*.mp4
+/target/
