@@ -1,14 +1,15 @@
-package com.la2;
 
-import static org.junit.jupiter.api.Assertions.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
+
+import model.Album;
 
 
 @Testable
 class AlbumTest {
-	private Album foundationAlbum = new Album("Dark Side of the Moon", "Pink Floyd", "Psychedelic Rock", 1973);)
+	private Album foundationAlbum = new Album("Dark Side of the Moon", "Pink Floyd", "Psychedelic Rock", 1973);
 
 	@Test
 	void printTest() {

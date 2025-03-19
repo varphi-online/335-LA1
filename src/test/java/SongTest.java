@@ -1,4 +1,4 @@
-package test.model;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -7,8 +7,9 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
 
-import main.model.Album;
-import main.model.Song;
+import model.Album;
+import model.Song;
+
 
 @Testable
 class SongTest {

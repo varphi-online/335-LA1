@@ -9,6 +9,11 @@ public class Song extends Album {
     private Boolean favorite = false;
     private int playCount = 0;
     private Timestamp lastPlayed = new Timestamp(System.currentTimeMillis());
+    
+    public Song() {
+        super();
+        title = "";
+    }
 
     public Song(String t, Album album) {
         super(album.getAlbumTitle(), album.getArtist(), album.getGenre(), album.getYear());
