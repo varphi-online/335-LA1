@@ -140,7 +140,10 @@ class LibraryModelTest {
 		foundationLibraryModel.addSong(song1);
 		foundationLibraryModel.addSong(song2);
 		foundationLibraryModel.addSong(song3);
-		assertEquals(foundationLibraryModel.retrieveTopRatedSongs(), Arrays.asList(song1, song2));
+		Playlist expectedPlaylist = new Playlist("Top Rated Songs");
+		expectedPlaylist.addSong(song1);
+		expectedPlaylist.addSong(song2);
+		assertEquals(foundationLibraryModel.retrieveTopRatedSongs().toString(), expectedPlaylist.toString());
 	}
 
 	/**
