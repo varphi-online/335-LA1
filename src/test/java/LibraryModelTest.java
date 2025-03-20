@@ -42,6 +42,15 @@ class LibraryModelTest {
 	}
 
 	@Test
+	void addSongTest() {
+		Album album = new Album("test", "Adele", "Pop", 2011);
+		Song song = new Song("Take It All",album);
+		foundationLibraryModel.addSong(song, true);
+		album.addSong(song.getTitle());
+		assertEquals(foundationLibraryModel.findAlbumTitle("test").get(0).getSongList().get(0), song.getTitle());
+	}
+
+	@Test
 	void getTopPlayedSongsTest() {
 		Song song1 = new Song("s1",foundationAlbum);
 		Song song2 = new Song("s2",foundationAlbum);
