@@ -71,7 +71,7 @@ public class MusicStore {
         ArrayList<Song> foundSongs = new ArrayList<>();
         if (rating != null) {
             // get by rating
-            songs.stream().filter(song -> song.getRating().orElse(0).equals(rating))
+            songs.stream().filter(song -> song.getRating().equals(rating))
                     .forEach(song -> foundSongs.add(new Song(song)));
         } else {
             // get all songs

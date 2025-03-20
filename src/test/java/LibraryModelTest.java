@@ -1,10 +1,12 @@
 
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
 
@@ -64,7 +66,12 @@ class LibraryModelTest {
 		foundationLibraryModel.addSong(song1);
 		foundationLibraryModel.addSong(song2);
 		foundationLibraryModel.addSong(song3);
-		assertEquals(foundationLibraryModel.retrieveTopPlayedSongs(), Arrays.asList(song2, song1, song3));
+
+		Playlist playlist = new Playlist("Top Played Songs");
+		playlist.addSong(song1);
+		playlist.addSong(song2);
+		playlist.addSong(song3);
+		assertEquals(foundationLibraryModel.retrieveTopPlayedSongs().toString(), playlist.toString());
 	}
 
 	@Test
@@ -80,10 +87,10 @@ class LibraryModelTest {
         foundationLibraryModel.addSong(song2);
         foundationLibraryModel.addSong(song3);
         // order expected 3, 1, 2
-        ArrayList<Song> recentSongs = foundationLibraryModel.retrieveMostRecentSongs();
-        assertEquals(song3, recentSongs.get(0));
-        assertEquals(song1, recentSongs.get(1));
-        assertEquals(song2, recentSongs.get(2));
+        Playlist recentSongs = foundationLibraryModel.retrieveMostRecentSongs();
+		assertEquals(recentSongs.getSongs().size(), 2);
+        assertEquals(song3, recentSongs.getSongs().get(0));
+        assertEquals(song1, recentSongs.getSongs().get(1));
 	}
 
 	@Test

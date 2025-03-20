@@ -1,9 +1,7 @@
 
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.Optional;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
 
@@ -29,7 +27,7 @@ class SongTest {
 	@Test
 	void rateTest() {
 		foundationSong.setRating(3);
-		assertEquals(foundationSong.getRating(), Optional.of(3));
+		assertEquals(foundationSong.getRating(), 3);
 	}
 	
 	@Test
@@ -42,7 +40,7 @@ class SongTest {
 	void removeRating() {
 		foundationSong.setRating(3);
 		foundationSong.setRating(-1);
-		assertEquals(foundationSong.getRating(), Optional.empty());
+		assertEquals(foundationSong.getRating(), -1);
 	}
 	
 	@Test
