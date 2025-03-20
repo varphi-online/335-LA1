@@ -173,6 +173,7 @@ public class Controller {
                 case '#' -> favorite(command, query, store);
                 case 'p' -> play(command, query, store);
                 case '&' -> shuffle(command, query, store);
+                case '^' -> sortedSearch(command, query, store);
                 default -> view.invalid();
             }
         } else {
@@ -187,6 +188,30 @@ public class Controller {
         } catch (Exception e) {
             view.error(e);
         }
+    }
+
+    private <T extends MusicStore> void sortedSearch(String command, String query, T store) {
+        ArrayList<Song> foundSongs = new ArrayList<>();
+        switch (command.charAt(1)) {
+            case 's' -> { 
+                foundSongs = store.findSongTitle(query);
+                foundSongs.sort((s1, s2) -> s1.getTitle().compareTo(s2.getTitle()));
+            }
+            case 'S' -> { 
+                foundSongs = store.findSongArtist(query); 
+                foundSongs.sort((s1, s2) -> s1.getArtist().compareTo(s2.getArtist()));  // sort ascending by artist
+            }
+            case 'r' -> { 
+                if (!(store instanceof LibraryModel)) { 
+                    view.invalid(); 
+                    return; 
+                }
+                foundSongs = store.findSongRating(null);
+                foundSongs.sort((s1, s2) -> s2.getRating().orElse(0).compareTo(s1.getRating().orElse(0)));  // sort descending by rating
+                
+            }
+        }
+        view.printResults(foundSongs);
     }
 
     /**
