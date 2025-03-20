@@ -25,6 +25,18 @@ public class LibraryModel extends MusicStore {
         return nowPlaying;
     }
 
+    public void addSong(Song song, Boolean addToAlbum) {
+        songs.add(song);
+        ArrayList<Album> foundAlbums = findAlbumTitle(song.getAlbumTitle(), true);
+        if (!foundAlbums.isEmpty()){
+            foundAlbums.get(0).addSong(song.getTitle());
+        } else {
+            Album album = new Album(song.getAlbumTitle(), song.getArtist(), song.getGenre(), song.getYear());
+            album.addSong(song.getTitle());
+            addAlbum(album);
+        }
+    }
+
     public void addPlaylist(String name) {
         playlists.add(new Playlist(name));
     }
@@ -42,17 +54,22 @@ public class LibraryModel extends MusicStore {
     public void removeAlbum(String title) {
         ArrayList<Album> found = new ArrayList<>();
         albums.stream().filter(a -> a.getAlbumTitle().equals(title)).forEach(a -> found.add(a));
-        found.forEach(a -> albums.remove(a));
+        found.forEach(a -> {
+            ArrayList<Song> foundSongs = new ArrayList<>();
+            songs.stream().filter(s -> s.getAlbumTitle().equals(a.getAlbumTitle())).forEach(s -> foundSongs.add(s));
+            foundSongs.forEach(s -> songs.remove(s));
+            albums.remove(a);
+        });
     }
 
-    public ArrayList<Song> getTopPlayedSongs() {
+    public ArrayList<Song> retrieveTopPlayedSongs() {
         ArrayList<Song> found = new ArrayList<>(songs);
         found.sort((s1, s2) -> s2.getPlayCount() - s1.getPlayCount());
         found = new ArrayList<>(found.subList(0, Math.min(10, found.size())));
         return found;
     }
 
-    public ArrayList<Song> getMostRecentSongs() {
+    public ArrayList<Song> retrieveMostRecentSongs() {
         ArrayList<Song> found = new ArrayList<>(songs);
         found.sort((s1, s2) -> s2.getLastPlayed().compareTo(s1.getLastPlayed()));
         found = new ArrayList<>(found.subList(0, Math.min(10, found.size())));
@@ -81,10 +98,15 @@ public class LibraryModel extends MusicStore {
     public ArrayList<Playlist> findPlaylist(String name) {
         ArrayList<Playlist> found = new ArrayList<>();
         playlists.stream().filter(playlist -> playlist.getName().toLowerCase().contains(name.toLowerCase())).forEach(p -> found.add(p));
+        retrieveAutoPlaylists().stream().filter(playlist -> playlist.getName().toLowerCase().contains(name.toLowerCase())).forEach(p -> found.add(p));
+        Playlist tops = retrieveTopRatedSongs();
+        if ("top rated songs".contains(name.toLowerCase()) && !tops.getSongs().isEmpty()) found.add(tops);
+        Playlist favs = retrieveFavoriteSongsAsPlaylist();
+        if ("favorite songs".contains(name.toLowerCase()) && !favs.getSongs().isEmpty()) found.add(favs);
         return found;
     }
 
-    public ArrayList<Playlist> getAutoPlaylists() {
+    public ArrayList<Playlist> retrieveAutoPlaylists() {
         ArrayList<Playlist> found = new ArrayList<>();
         HashMap<String, ArrayList<Song>> songsByGenre = new HashMap<>();
         songs.stream().filter(song -> song.getGenre() != null).forEach(song -> {
@@ -103,9 +125,15 @@ public class LibraryModel extends MusicStore {
         return found;
     }
 
-    public ArrayList<Song> getTopRatedSongs() {
-        ArrayList<Song> found = new ArrayList<>();
-        songs.stream().filter(song -> song.getRating().orElse(0) >= 4).forEach(s -> found.add(s));
+    public Playlist retrieveTopRatedSongs() {
+        Playlist found = new Playlist("Top Rated Songs");
+        songs.stream().filter(song -> song.getRating().orElse(0) >= 4).forEach(s -> found.addSong(s));
+        return found;
+    }
+
+    public Playlist retrieveFavoriteSongsAsPlaylist() {
+        Playlist found = new Playlist("Favorite Songs");
+        songs.stream().filter(song -> song.getFavorite()).forEach(s -> found.addSong(s));
         return found;
     }
     

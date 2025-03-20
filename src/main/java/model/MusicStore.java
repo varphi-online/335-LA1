@@ -32,6 +32,13 @@ public class MusicStore {
         return foundAlbums;
     }
 
+    public ArrayList<Album> findAlbumTitle(String title, Boolean escape) {
+        ArrayList<Album> foundAlbums = new ArrayList<>();
+        albums.stream().filter(album -> album.getAlbumTitle().toLowerCase().contains(title.toLowerCase()))
+                .forEach(album -> foundAlbums.add(album));
+        return foundAlbums;
+    }
+
     public ArrayList<Album> findAlbumArtist(String name) {
         ArrayList<Album> foundAlbums = new ArrayList<>();
         albums.stream().filter(album -> album.getArtist().toLowerCase().contains(name.toLowerCase()))
@@ -41,8 +48,8 @@ public class MusicStore {
 
     public ArrayList<Album> findAlbumSong(String title) {
         ArrayList<Album> foundAlbums = new ArrayList<>();
-        songs.stream().filter(s -> s.getTitle().contains(title))
-                .forEach(s -> foundAlbums.add(new Album((Album)s)));
+        findSongTitle(title)
+                .forEach(s -> foundAlbums.add(findAlbumTitle(s.getAlbumTitle()).get(0)));
         return foundAlbums;
     }
 

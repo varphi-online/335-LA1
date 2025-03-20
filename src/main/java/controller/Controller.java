@@ -1,10 +1,12 @@
 package controller;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -210,14 +212,14 @@ public class Controller {
             }
             case 'n' -> {
                 if (store instanceof LibraryModel) {
-                    view.printResults(currentUser.getLibrary().getMostRecentSongs());
+                    view.printResults(currentUser.getLibrary().retrieveMostRecentSongs());
                 } else {
                     view.invalid();
                 }
             }
             case 'N' -> {
                 if (store instanceof LibraryModel) {
-                    view.printResults(currentUser.getLibrary().getTopPlayedSongs());
+                    view.printResults(currentUser.getLibrary().retrieveTopPlayedSongs());
                 } else {
                     view.invalid();
                 }
@@ -252,7 +254,7 @@ public class Controller {
                     }
                 }
                 case 's' -> {
-                    store.findSongTitle(query).forEach(s -> currentUser.getLibrary().addSong(s));
+                    store.findSongTitle(query).forEach(s -> currentUser.getLibrary().addSong(s, true));
                     if (!store.findSongTitle(query).isEmpty()) {
                         view.alert("Added song to Library.");
                     } else {
