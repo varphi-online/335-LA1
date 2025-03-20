@@ -20,13 +20,18 @@ class MusicStoreTest {
 	
 	public MusicStoreTest() throws IOException {
 		foundationMusicStore = new MusicStore();
-		foundationMusicStore.addAlbum(new Album("21", "Adele", "Pop", 2011));
+		foundationMusicStore.addAlbum(foundationAlbum);
 		foundationMusicStore.addSong(new Song("Take It All",new Album("21", "Adele", "Pop", 2011)));
 	}
 	
 	@Test
 	void albumByTitleTest() {
 		assertEquals(foundationMusicStore.findAlbumTitle("21").get(0).toString(), foundationAlbum.toString());
+	}
+
+	@Test 
+	void albumByTitleEscapeTest() {
+		assertEquals(foundationMusicStore.findAlbumTitle("21", true).get(0).hashCode(), foundationAlbum.hashCode());
 	}
 	
 	@Test
