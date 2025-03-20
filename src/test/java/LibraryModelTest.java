@@ -55,7 +55,7 @@ class LibraryModelTest {
 		foundationLibraryModel.addSong(song1);
 		foundationLibraryModel.addSong(song2);
 		foundationLibraryModel.addSong(song3);
-		assertEquals(foundationLibraryModel.getTopPlayedSongs(), Arrays.asList(song2, song1, song3));
+		assertEquals(foundationLibraryModel.retrieveTopPlayedSongs(), Arrays.asList(song2, song1, song3));
 	}
 
 	@Test
@@ -71,7 +71,7 @@ class LibraryModelTest {
         foundationLibraryModel.addSong(song2);
         foundationLibraryModel.addSong(song3);
         // order expected 3, 1, 2
-        ArrayList<Song> recentSongs = foundationLibraryModel.getMostRecentSongs();
+        ArrayList<Song> recentSongs = foundationLibraryModel.retrieveMostRecentSongs();
         assertEquals(song3, recentSongs.get(0));
         assertEquals(song1, recentSongs.get(1));
         assertEquals(song2, recentSongs.get(2));
@@ -121,7 +121,7 @@ class LibraryModelTest {
 			if (i < size2) foundationLibraryModel.addSong(new Song("s" + i, album2));
 			if (i < size3) foundationLibraryModel.addSong(new Song("s" + i, album3));
 		}
-		ArrayList<Playlist> autoPlaylists = foundationLibraryModel.getAutoPlaylists();
+		ArrayList<Playlist> autoPlaylists = foundationLibraryModel.retrieveAutoPlaylists();
 		assertEquals(autoPlaylists.size(), 2);
 		assertEquals(autoPlaylists.get(0).getSongs().size(), size2);
 		assertEquals(autoPlaylists.get(1).getSongs().size(), size3);
@@ -140,7 +140,7 @@ class LibraryModelTest {
 		foundationLibraryModel.addSong(song1);
 		foundationLibraryModel.addSong(song2);
 		foundationLibraryModel.addSong(song3);
-		assertEquals(foundationLibraryModel.getTopRatedSongs(), Arrays.asList(song1, song2));
+		assertEquals(foundationLibraryModel.retrieveTopRatedSongs(), Arrays.asList(song1, song2));
 	}
 
 	/**
