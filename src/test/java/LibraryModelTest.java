@@ -108,6 +108,41 @@ class LibraryModelTest {
 		assertEquals(foundationLibraryModel.findAlbumArtist(""), new ArrayList<Album>());
 	}
 
+	@Test 
+	void getAutoPlaylistsTest() {
+		Album album1 = new Album("t1", "a1", "g1", 2000);
+		Album album2 = new Album("t2", "a2", "g2", 2001);
+		Album album3 = new Album("t3", "a3", "g3", 2002);
+		int size1 = 5;
+		int size2 = 10;
+		int size3 = 12;
+		for (int i = 0; i < 15; i++) {
+			if (i < size1) foundationLibraryModel.addSong(new Song("s" + i, album1));
+			if (i < size2) foundationLibraryModel.addSong(new Song("s" + i, album2));
+			if (i < size3) foundationLibraryModel.addSong(new Song("s" + i, album3));
+		}
+		ArrayList<Playlist> autoPlaylists = foundationLibraryModel.getAutoPlaylists();
+		assertEquals(autoPlaylists.size(), 2);
+		assertEquals(autoPlaylists.get(0).getSongs().size(), size2);
+		assertEquals(autoPlaylists.get(1).getSongs().size(), size3);
+		assertEquals(autoPlaylists.get(0).getName(), "g2 Songs");
+		assertEquals(autoPlaylists.get(1).getName(), "g3 Songs");
+	}
+
+	@Test
+	void getTopRatedSongsTest() {
+		Song song1 = new Song("s1", foundationAlbum);
+		Song song2 = new Song("s2", foundationAlbum);
+		Song song3 = new Song("s3", foundationAlbum);
+		song1.setRating(5);
+		song2.setRating(4);
+		song3.setRating(3);
+		foundationLibraryModel.addSong(song1);
+		foundationLibraryModel.addSong(song2);
+		foundationLibraryModel.addSong(song3);
+		assertEquals(foundationLibraryModel.getTopRatedSongs(), Arrays.asList(song1, song2));
+	}
+
 	/**
      * Helper func to cause intentional delay in ms
      */
