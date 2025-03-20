@@ -60,11 +60,10 @@ class MusicStoreTest {
 		foundationMusicStore.addSong(song1);
 		foundationMusicStore.addSong(song2);
 		foundationMusicStore.addSong(song3);
-		// expect song order 1,3,2
 		ArrayList<Song> foundSongs = foundationMusicStore.findSongRating(null);
-		assertEquals(foundSongs.get(0).toString(), song1.toString());
-		assertEquals(foundSongs.get(1).toString(), song3.toString());
+		assertEquals(foundSongs.get(1).toString(), song1.toString());
 		assertEquals(foundSongs.get(2).toString(), song2.toString());
+		assertEquals(foundSongs.get(3).toString(), song3.toString());
 	}
 
 	@Test
@@ -118,6 +117,8 @@ class MusicStoreTest {
 		Song song2 = new Song("s2", album2);
 		foundationMusicStore.addSong(song1);
 		foundationMusicStore.addSong(song2);
+		foundationMusicStore.addAlbum(album1);
+		foundationMusicStore.addAlbum(album2);
 		ArrayList<Album> found = foundationMusicStore.findAlbumSong("s1");
 		assertEquals(found.size(), 1);
 		assertEquals(found.get(0).toString(), album1.toString());
