@@ -1,5 +1,6 @@
 package model;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class LibraryModel extends MusicStore {
     private final ArrayList<Playlist> playlists;
@@ -82,4 +83,30 @@ public class LibraryModel extends MusicStore {
         playlists.stream().filter(playlist -> playlist.getName().toLowerCase().contains(name.toLowerCase())).forEach(p -> found.add(p));
         return found;
     }
+
+    public ArrayList<Playlist> getAutoPlaylists() {
+        ArrayList<Playlist> found = new ArrayList<>();
+        HashMap<String, ArrayList<Song>> songsByGenre = new HashMap<>();
+        songs.stream().filter(song -> song.getGenre() != null).forEach(song -> {
+            if (!songsByGenre.containsKey(song.getGenre())) {
+                songsByGenre.put(song.getGenre(), new ArrayList<>(java.util.Collections.singletonList(song)));
+            }  else {
+                songsByGenre.get(song.getGenre()).add(song);
+            }
+        });
+        songsByGenre.entrySet().forEach(entry -> {
+            Playlist playlist = new Playlist(entry.getKey() + " Songs");
+            entry.getValue().forEach(song -> playlist.addSong(song));
+            if (playlist.getSongs().size() >= 10) // if 10+ songs in genre make autoplaylist
+                found.add(playlist);
+        });
+        return found;
+    }
+
+    public ArrayList<Song> getTopRatedSongs() {
+        ArrayList<Song> found = new ArrayList<>();
+        songs.stream().filter(song -> song.getRating().orElse(0) >= 4).forEach(s -> found.add(s));
+        return found;
+    }
+    
 }
