@@ -23,7 +23,7 @@ public class Song extends Album {
     public Song(Song song) {
         super(song.getAlbumTitle(), song.getArtist(), song.getGenre(), song.getYear());
         title = song.getTitle();
-        rating = song.getRating();
+        rating = Optional.of(song.getRating());
         favorite = song.getFavorite();
         playCount = song.getPlayCount();
         lastPlayed = song.getLastPlayed();
@@ -42,8 +42,8 @@ public class Song extends Album {
         return lastPlayed;
     }
 
-    public Optional<Integer> getRating() {
-        return rating;
+    public Integer getRating() {
+        return rating.orElse(-1);
     }
     
     public void setRating(int newRating) {
@@ -76,7 +76,7 @@ public class Song extends Album {
     public String toString() {
         return String.format(
                 "│ %-40s │ %-24s │ %-29s │ %-5.5s │ %-4d │   %-4s │ %s",
-                title, artist, albumTitle, genre, year, (rating.isEmpty() ? " " : "" + rating.get()),
+                title, artist, albumTitle, genre, year, ((rating.isEmpty() || rating.get().equals(-1)) ? " " : "" + rating.get()),
                 (favorite ? " *" : ""));
     }
 }

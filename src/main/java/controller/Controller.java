@@ -207,7 +207,7 @@ public class Controller {
                     return; 
                 }
                 foundSongs = store.findSongRating(null);
-                foundSongs.sort((s1, s2) -> s2.getRating().orElse(0).compareTo(s1.getRating().orElse(0)));  // sort descending by rating
+                foundSongs.sort((s1, s2) -> s2.getRating().compareTo(s1.getRating()));  // sort descending by rating
                 
             }
         }
@@ -237,14 +237,14 @@ public class Controller {
             }
             case 'n' -> {
                 if (store instanceof LibraryModel) {
-                    view.printResults(currentUser.getLibrary().retrieveMostRecentSongs());
+                    view.printResults(new ArrayList<>(java.util.Collections.singletonList(currentUser.getLibrary().retrieveMostRecentSongs())));
                 } else {
                     view.invalid();
                 }
             }
             case 'N' -> {
                 if (store instanceof LibraryModel) {
-                    view.printResults(currentUser.getLibrary().retrieveTopPlayedSongs());
+                    view.printResults(new ArrayList<>(java.util.Collections.singletonList(currentUser.getLibrary().retrieveTopPlayedSongs())));
                 } else {
                     view.invalid();
                 }
