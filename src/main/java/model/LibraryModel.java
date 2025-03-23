@@ -67,6 +67,7 @@ public class LibraryModel extends MusicStore {
     public Playlist retrieveTopPlayedSongs() {
         ArrayList<Song> found = new ArrayList<>(songs);
         Playlist out = new Playlist("Top Played Songs");
+        found.sort((s1, s2) -> Integer.compare(s2.getPlayCount(), s1.getPlayCount()));
         found = new ArrayList<>(found.stream().filter(s -> s.getPlayCount() > 0).collect(Collectors.toList()));
         found = new ArrayList<>(found.subList(0, Math.min(10, found.size())));
         found.stream().forEach(s -> out.addSong(s));

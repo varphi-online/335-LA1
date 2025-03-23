@@ -68,9 +68,9 @@ class LibraryModelTest {
 		foundationLibraryModel.addSong(song3);
 
 		Playlist playlist = new Playlist("Top Played Songs");
-		playlist.addSong(song1);
-		playlist.addSong(song2);
-		playlist.addSong(song3);
+		playlist.addSong(song2);  // song2 has the highest play count
+		playlist.addSong(song1);  // song1 has the second highest play count
+		playlist.addSong(song3);  // song3 has the least play count
 		assertEquals(foundationLibraryModel.retrieveTopPlayedSongs().toString(), playlist.toString());
 	}
 
